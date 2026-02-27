@@ -1,0 +1,196 @@
+<!-- ================================================================
+  CHEATSTACK NOTE TEMPLATE
+  ================================================================
+  HOW TO USE:
+  1. Copy this file and rename it:  notes/your-topic.html
+  2. Fill in the content below
+  3. Register it in index.html → add an object to the NOTES array:
+
+     {
+       id: 'your-topic',        ← must match filename (without .html)
+       title: 'Your Topic',
+       icon: '📝',
+       category: 'Languages',   ← pick an existing category or add new
+       file: 'notes/your-topic.html',
+       badge: '10 topics',
+       live: true               ← set to true when ready
+     },
+
+  4. Open index.html in a browser. Done!
+  ================================================================ -->
+
+<!-- HEADER -->
+<div class="cs-badge">REFERENCE GUIDE</div>
+<h1 class="cs-title">Your Topic Cheatsheet</h1>
+<p class="cs-subtitle">// short description of what this covers</p>
+
+<!-- TABLE OF CONTENTS — add/remove links as needed -->
+<nav class="cs-toc">
+  <h3>TABLE OF CONTENTS</h3>
+  <a href="#s1">1. First Section</a>
+  <a href="#s2">2. Second Section</a>
+  <a href="#s3">3. Third Section</a>
+  <a href="#practice">📝 Practice Questions</a>
+</nav>
+
+<!-- ============================================================
+  SECTION 1
+  ============================================================ -->
+<section class="cs-section" id="s1">
+  <div class="cs-section-header">
+    <span class="cs-num">01</span>
+    <h2>First Section Title</h2>
+    <span class="cs-tag">TAG LABEL</span>
+  </div>
+  <div class="cs-cards">
+
+    <!-- Basic card -->
+    <div class="cs-card">
+      <div class="cmd-name">Command or Concept Name</div>
+      <div class="cmd-desc">Short description of what this does.</div>
+      <pre>your code or syntax here</pre>
+    </div>
+
+    <!-- Wide card (spans full width) -->
+    <div class="cs-card wide">
+      <div class="cmd-name">Wide Card Example</div>
+      <div class="cmd-desc">Use .wide for longer code blocks.</div>
+      <pre>longer code example
+that spans multiple lines
+goes here</pre>
+      <!-- Optional tip box -->
+      <div class="tip">Pro tip: add tips like this inside cards.</div>
+    </div>
+
+    <!-- Another card -->
+    <div class="cs-card">
+      <div class="cmd-name">Another Concept</div>
+      <pre>example code</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 2
+  ============================================================ -->
+<section class="cs-section" id="s2">
+  <div class="cs-section-header">
+    <span class="cs-num">02</span>
+    <h2>Second Section Title</h2>
+    <span class="cs-tag">CATEGORY</span>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Concept</div>
+      <pre>code here</pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">Concept</div>
+      <pre>code here</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 3
+  ============================================================ -->
+<section class="cs-section" id="s3">
+  <div class="cs-section-header">
+    <span class="cs-num">03</span>
+    <h2>Third Section Title</h2>
+    <span class="cs-tag">CATEGORY</span>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card wide">
+      <div class="cmd-name">Example</div>
+      <pre>code here</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+  PRACTICE QUESTIONS  (optional — delete if not needed)
+  ============================================================ -->
+<section class="cs-section" id="practice">
+  <div class="cs-section-header">
+    <span class="cs-num">🎯</span>
+    <h2>Practice Questions</h2>
+    <span class="cs-tag">PLACEMENT PREP</span>
+  </div>
+
+  <!-- Progress tracker — update TOTAL in the script below -->
+  <div class="progress-box">
+    <div class="progress-row">
+      <span id="prog-text">0 / 3 solved</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-bar"></div>
+    </div>
+  </div>
+
+  <div class="section-label">── EASY ──</div>
+
+  <div class="cs-card wide difficulty-easy" style="margin-bottom:0.75rem">
+    <div class="q-num">Q1 · EASY</div>
+    <div class="q-text">Your question text here.</div>
+    <div style="display:flex;gap:0.5rem">
+      <button class="reveal-btn" onclick="toggleAns('a1',this)">👁 Show Answer</button>
+      <button class="mark-done-btn" id="mark1" onclick="markQ(1)">✓ Mark Done</button>
+    </div>
+    <div class="answer-box" id="a1">
+      <pre>your answer code here</pre>
+    </div>
+  </div>
+
+  <div class="section-label">── MEDIUM ──</div>
+
+  <div class="cs-card wide difficulty-medium" style="margin-bottom:0.75rem">
+    <div class="q-num">Q2 · MEDIUM</div>
+    <div class="q-text">Your medium question here.</div>
+    <div style="display:flex;gap:0.5rem">
+      <button class="reveal-btn" onclick="toggleAns('a2',this)">👁 Show Answer</button>
+      <button class="mark-done-btn" id="mark2" onclick="markQ(2)">✓ Mark Done</button>
+    </div>
+    <div class="answer-box" id="a2">
+      <pre>answer here</pre>
+    </div>
+  </div>
+
+  <div class="section-label">── HARD ──</div>
+
+  <div class="cs-card wide difficulty-hard" style="margin-bottom:0.75rem">
+    <div class="q-num">Q3 · HARD</div>
+    <div class="q-text">Your hard question here.</div>
+    <div style="display:flex;gap:0.5rem">
+      <button class="reveal-btn" onclick="toggleAns('a3',this)">👁 Show Answer</button>
+      <button class="mark-done-btn" id="mark3" onclick="markQ(3)">✓ Mark Done</button>
+    </div>
+    <div class="answer-box" id="a3">
+      <pre>answer here</pre>
+    </div>
+  </div>
+
+</section>
+
+<!-- Practice tracker script — change TOTAL to match your question count -->
+<script>
+const TOTAL = 3; // ← UPDATE THIS to match number of questions
+const done = new Set();
+function toggleAns(id, btn) {
+  const box = document.getElementById(id);
+  box.classList.toggle('open');
+  btn.textContent = box.classList.contains('open') ? '🙈 Hide Answer' : '👁 Show Answer';
+}
+function markQ(n) {
+  const btn = document.getElementById('mark' + n);
+  done.has(n) ? done.delete(n) : done.add(n);
+  btn.classList.toggle('done', done.has(n));
+  btn.textContent = done.has(n) ? '✅ Done!' : '✓ Mark Done';
+  const pct = Math.round(done.size / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = done.size + ' / ' + TOTAL + ' solved';
+  document.getElementById('prog-pct').textContent = pct + '%';
+}
+</script>

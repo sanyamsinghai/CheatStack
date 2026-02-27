@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CheatStack — Technical Notes & Cheatsheets</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="top-header">
+  <button class="hamburger" onclick="toggleSidebar()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <a href="#" onclick="goHome(); return false;" class="logo">
+    <div class="logo-icon">CS</div>
+    <span class="logo-text">Cheat<span>Stack</span></span>
+  </a>
+  <div class="header-search-wrapper">
+    <div class="header-search">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search notes..." oninput="handleSearch(this.value)" onkeydown="handleSearchKeydown(event)">
+    </div>
+    <div class="search-results" id="searchResults" style="display:none;"></div>
+  </div>
+  <div class="header-right">
+    <button class="btn-pdf" id="headerPdfBtn" onclick="window.print()" style="display:none;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export PDF
+    </button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+  <!-- SIDEBAR — auto-built from NOTES_REGISTRY below -->
+  <nav class="sidebar" id="sidebar">
+    <div id="sidebarContent"></div>
+  </nav>
+
+  <main class="main">
+    <!-- LANDING PAGE -->
+    <div class="landing" id="landing">
+      <div class="landing-grid"></div>
+      <div class="landing-content">
+        <div class="landing-badge">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+          PLACEMENT READY · ALWAYS FREE
+        </div>
+        <h1 class="landing-title">Your ultimate<br><span class="hl">technical cheatsheet</span></h1>
+        <p class="landing-sub">Handcrafted notes & cheatsheets for CS students grinding placements. No fluff, just the good stuff.</p>
+        <div class="landing-cards" id="landingCards"></div>
+      </div>
+    </div>
+
+    <!-- NOTE FRAME — loads note HTML files here -->
+    <div id="noteArea" style="display:none; flex:1; flex-direction:column;"></div>
+
+    <!-- COMING SOON -->
+    <div class="coming-soon" id="comingSoon" style="display:none;">
+      <div class="cs-icon">🚧</div>
+      <h2 id="comingSoonTitle">Coming Soon</h2>
+      <p>This cheatsheet is being crafted. Check back soon!</p>
+    </div>
+  </main>
+</div>
+
+<script>
+// ============================================================
+//  NOTES REGISTRY
+//  TO ADD A NEW NOTE: just add one object to this array.
+//  "file" must match the filename inside the notes/ folder.
+// ============================================================
+const NOTES = [
+  {
+    id: 'mysql',
+    title: 'MySQL / SQL',
+    icon: '🐬',
+    category: 'Databases',
+    file: 'notes/mysql.html',
+    badge: '20 topics',
+    live: true
+  },
+  {
+    id: 'postgresql',
+    title: 'PostgreSQL',
+    icon: '🐘',
+    category: 'Databases',
+    file: 'notes/postgresql.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'mongodb',
+    title: 'MongoDB',
+    icon: '🍃',
+    category: 'Databases',
+    file: 'notes/mongodb.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'python',
+    title: 'Python',
+    icon: '🐍',
+    category: 'Languages',
+    file: 'notes/python.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'javascript',
+    title: 'JavaScript',
+    icon: '🟨',
+    category: 'Languages',
+    file: 'notes/javascript.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'java',
+    title: 'Java',
+    icon: '☕',
+    category: 'Languages',
+    file: 'notes/java.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'cpp',
+    title: 'C++',
+    icon: '⚙️',
+    category: 'Languages',
+    file: 'notes/cpp.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'dsa',
+    title: 'DSA',
+    icon: '📊',
+    category: 'CS Fundamentals',
+    file: 'notes/dsa.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'os',
+    title: 'Operating Systems',
+    icon: '🖥️',
+    category: 'CS Fundamentals',
+    file: 'notes/os.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'networking',
+    title: 'Networking',
+    icon: '🌐',
+    category: 'CS Fundamentals',
+    file: 'notes/networking.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'dbms',
+    title: 'DBMS Theory',
+    icon: '🗄️',
+    category: 'CS Fundamentals',
+    file: 'notes/dbms.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'html-css',
+    title: 'HTML & CSS',
+    icon: '🎨',
+    category: 'Web Dev',
+    file: 'notes/html-css.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'react',
+    title: 'React',
+    icon: '⚛️',
+    category: 'Web Dev',
+    file: 'notes/react.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'git',
+    title: 'Git',
+    icon: '🔀',
+    category: 'DevOps & Tools',
+    file: 'notes/git.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'linux',
+    title: 'Linux Commands',
+    icon: '🐧',
+    category: 'DevOps & Tools',
+    file: 'notes/linux.html',
+    badge: 'soon',
+    live: false
+  },
+  {
+    id: 'docker',
+    title: 'Docker',
+    icon: '🐳',
+    category: 'DevOps & Tools',
+    file: 'notes/docker.html',
+    badge: 'soon',
+    live: false
+  },
+];
+
+// ============================================================
+//  BUILD SIDEBAR & LANDING CARDS FROM REGISTRY
+// ============================================================
+function buildSidebar() {
+  const categories = {};
+  NOTES.forEach(n => {
+    if (!categories[n.category]) categories[n.category] = [];
+    categories[n.category].push(n);
+  });
+
+  const catIcons = {
+    'Databases': '📚',
+    'Languages': '💻',
+    'CS Fundamentals': '🧠',
+    'Web Dev': '🌐',
+    'DevOps & Tools': '☁️'
+  };
+
+  let html = '';
+  Object.entries(categories).forEach(([cat, notes], i) => {
+    if (i > 0) html += '<div class="sidebar-divider"></div>';
+    html += `<div class="sidebar-section">`;
+    html += `<div class="sidebar-label">${catIcons[cat] || '📂'} ${cat}</div>`;
+    notes.forEach(n => {
+      html += `
+        <a class="sidebar-item" id="nav-${n.id}" onclick="loadNote('${n.id}')">
+          <span class="icon">${n.icon}</span>
+          ${n.title}
+          <span class="badge">${n.badge}</span>
+        </a>`;
+    });
+    html += `</div>`;
+  });
+
+  document.getElementById('sidebarContent').innerHTML = html;
+}
+
+function buildLandingCards() {
+  const live = NOTES.filter(n => n.live);
+  const coming = NOTES.filter(n => !n.live).slice(0, 2);
+  const shown = [...live, ...coming];
+
+  document.getElementById('landingCards').innerHTML = shown.map(n => `
+    <div class="landing-card" onclick="${n.live ? `loadNote('${n.id}')` : `showComingSoon('${n.title}')`}">
+      <div class="lc-icon">${n.icon}</div>
+      <div class="lc-title">${n.title}</div>
+      <div class="lc-meta">${n.live ? n.badge : 'Coming soon'}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+//  LOAD NOTE INTO noteArea
+// ============================================================
+let currentNoteId = null;
+
+function goHome() {
+  currentNoteId = null;
+  document.getElementById('landing').style.display = 'block';
+  document.getElementById('noteArea').style.display = 'none';
+  document.getElementById('comingSoon').style.display = 'none';
+  document.getElementById('headerPdfBtn').style.display = 'none';
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  closeSidebar();
+}
+
+function loadNote(id) {
+  const note = NOTES.find(n => n.id === id);
+  if (!note) return;
+  if (!note.live) { showComingSoon(note.title); return; }
+
+  currentNoteId = id;
+
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('comingSoon').style.display = 'none';
+  document.getElementById('headerPdfBtn').style.display = 'block';
+
+  const area = document.getElementById('noteArea');
+  area.style.display = 'flex';
+  area.classList.add('fade-in');
+
+  // Build topbar
+  area.innerHTML = `
+    <div class="note-topbar">
+      <div class="breadcrumb">
+        <a href="#" onclick="goHome(); return false;">Home</a>
+        <span class="sep">›</span>
+        <span>${note.category}</span>
+        <span class="sep">›</span>
+        <span class="cur">${note.title}</span>
+      </div>
+      <div class="note-actions">
+        <button class="btn-sm btn-outline" onclick="copyLink()">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Link
+        </button>
+        <button class="btn-sm btn-primary" onclick="window.print()">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export PDF
+        </button>
+      </div>
+    </div>
+    <div class="note-content" id="noteBody">
+      <div style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;padding:2rem 0;">Loading...</div>
+    </div>
+  `;
+
+  // Fetch the note HTML file
+  fetch(note.file)
+    .then(r => {
+      if (!r.ok) throw new Error('File not found: ' + note.file);
+      return r.text();
+    })
+    .then(html => {
+      document.getElementById('noteBody').innerHTML = html;
+      addCopyButtons();
+      window.scrollTo(0, 0);
+    })
+    .catch(err => {
+      document.getElementById('noteBody').innerHTML = `
+        <div style="padding:3rem;text-align:center;">
+          <div style="font-size:2.5rem;margin-bottom:1rem;">📄</div>
+          <h2 style="font-family:var(--font-display);color:#fff;margin-bottom:0.5rem;">Note file not found</h2>
+          <p style="color:var(--text-muted);font-family:var(--font-mono);font-size:0.8rem;">
+            Create <code style="color:var(--accent)">${note.file}</code> to add this note.<br><br>
+            Copy <code style="color:var(--accent)">notes/_TEMPLATE.html</code> and fill it in!
+          </p>
+        </div>`;
+    });
+
+  // Update sidebar active state
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+
+  closeSidebar();
+}
+
+// ============================================================
+//  COPY BUTTONS ON CODE BLOCKS
+// ============================================================
+function addCopyButtons() {
+  document.querySelectorAll('#noteBody pre').forEach(pre => {
+    if (pre.querySelector('.copy-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'copy';
+    btn.onclick = () => {
+      const text = pre.textContent.replace(/^copy$/m, '').trim();
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    };
+    pre.appendChild(btn);
+  });
+}
+
+// ============================================================
+//  SEARCH
+// ============================================================
+function handleSearch(val) {
+  val = val.trim();
+  const resultsContainer = document.getElementById('searchResults');
+  
+  if (!val) {
+    resultsContainer.style.display = 'none';
+    resultsContainer.innerHTML = '';
+    return;
+  }
+  
+  // Search through all notes (case-insensitive)
+  const lowerVal = val.toLowerCase();
+  const results = NOTES.filter(n => 
+    n.title.toLowerCase().includes(lowerVal) || 
+    n.category.toLowerCase().includes(lowerVal)
+  );
+  
+  if (results.length === 0) {
+    resultsContainer.style.display = 'none';
+    return;
+  }
+  
+  // Display search results
+  resultsContainer.innerHTML = results.map(n => `
+    <div class="search-result-item" onclick="openSearchResult('${n.id}'); return false;">
+      <div>
+        <div class="search-result-title">${n.icon} ${n.title}</div>
+        <div class="search-result-category">${n.category}</div>
+      </div>
+      ${n.live ? '' : '<span style="color:var(--text-muted);font-size:0.7rem;">soon</span>'}
+    </div>
+  `).join('');
+  
+  resultsContainer.style.display = 'block';
+}
+
+function openSearchResult(id) {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').style.display = 'none';
+  document.getElementById('searchResults').innerHTML = '';
+  loadNote(id);
+}
+
+function handleSearchKeydown(event) {
+  if (event.key === 'Escape') {
+    document.getElementById('searchResults').style.display = 'none';
+    document.getElementById('searchInput').value = '';
+  }
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function showComingSoon(name) {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('noteArea').style.display = 'none';
+  document.getElementById('headerPdfBtn').style.display = 'none';
+  document.getElementById('comingSoonTitle').textContent = name + ' — Coming Soon';
+  document.getElementById('comingSoon').style.display = 'block';
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  closeSidebar();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = document.querySelector('.note-actions .btn-outline');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copied!';
+    setTimeout(() => btn.innerHTML = orig, 2000);
+  });
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+buildSidebar();
+buildLandingCards();
+</script>
+</body>
+</html>

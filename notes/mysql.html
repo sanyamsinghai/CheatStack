@@ -1,0 +1,415 @@
+<!-- notes/mysql.html — loaded dynamically by index.html -->
+<div class="cs-badge">REFERENCE GUIDE</div>
+<h1 class="cs-title">MySQL / SQL Cheatsheet</h1>
+<p class="cs-subtitle">// complete commands · clauses · functions · topics with examples</p>
+
+<nav class="cs-toc">
+  <h3>TABLE OF CONTENTS</h3>
+  <a href="#cs1">1. Database & Table Management</a>
+  <a href="#cs2">2. Data Types</a>
+  <a href="#cs3">3. CRUD Operations</a>
+  <a href="#cs4">4. SELECT & Filtering</a>
+  <a href="#cs5">5. Sorting & Limiting</a>
+  <a href="#cs6">6. Aggregate Functions</a>
+  <a href="#cs7">7. GROUP BY & HAVING</a>
+  <a href="#cs8">8. JOINs</a>
+  <a href="#cs9">9. Subqueries & CTEs</a>
+  <a href="#cs10">10. String Functions</a>
+  <a href="#cs11">11. Date & Time Functions</a>
+  <a href="#cs12">12. Numeric Functions</a>
+  <a href="#cs13">13. Constraints</a>
+  <a href="#cs14">14. Indexes</a>
+  <a href="#cs15">15. Views</a>
+  <a href="#cs16">16. Stored Procedures</a>
+  <a href="#cs17">17. Triggers</a>
+  <a href="#cs18">18. Transactions</a>
+  <a href="#cs19">19. Users & Permissions</a>
+  <a href="#cs20">20. Window Functions</a>
+  <a href="#practice">📝 Practice Questions</a>
+</nav>
+
+<!-- S1 -->
+<section class="cs-section" id="cs1">
+  <div class="cs-section-header"><span class="cs-num">01</span><h2>Database & Table Management (DDL)</h2><span class="cs-tag">DATA DEFINITION LANGUAGE</span></div>
+  <div class="cs-cards">
+    <div class="cs-card"><div class="cmd-name">CREATE DATABASE</div><div class="cmd-desc">Creates a new database.</div><pre><span class="kw">CREATE DATABASE</span> shop;
+<span class="kw">CREATE DATABASE IF NOT EXISTS</span> shop;</pre></div>
+    <div class="cs-card"><div class="cmd-name">DROP DATABASE</div><div class="cmd-desc">Permanently deletes a database.</div><pre><span class="kw">DROP DATABASE</span> shop;
+<span class="kw">DROP DATABASE IF EXISTS</span> shop;</pre></div>
+    <div class="cs-card"><div class="cmd-name">USE / SHOW</div><div class="cmd-desc">Select a database; list tables or columns.</div><pre><span class="kw">USE</span> shop;
+<span class="kw">SHOW DATABASES</span>;
+<span class="kw">SHOW TABLES</span>;
+<span class="kw">SHOW COLUMNS FROM</span> <span class="tbl">orders</span>;</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">CREATE TABLE</div><div class="cmd-desc">Create a table with columns and constraints.</div><pre><span class="kw">CREATE TABLE</span> <span class="tbl">users</span> (
+  <span class="col">id</span>         <span class="fn">INT</span> <span class="kw">AUTO_INCREMENT PRIMARY KEY</span>,
+  <span class="col">name</span>       <span class="fn">VARCHAR</span>(<span class="nm">100</span>) <span class="kw">NOT NULL</span>,
+  <span class="col">email</span>      <span class="fn">VARCHAR</span>(<span class="nm">150</span>) <span class="kw">UNIQUE NOT NULL</span>,
+  <span class="col">age</span>        <span class="fn">INT</span> <span class="kw">DEFAULT</span> <span class="nm">0</span>,
+  <span class="col">created_at</span> <span class="fn">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">CURRENT_TIMESTAMP</span>
+);</pre></div>
+    <div class="cs-card"><div class="cmd-name">DROP / TRUNCATE</div><pre><span class="kw">DROP TABLE IF EXISTS</span> <span class="tbl">users</span>;
+<span class="kw">TRUNCATE TABLE</span> <span class="tbl">logs</span>;</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">ALTER TABLE</div><div class="cmd-desc">Modify an existing table structure.</div><pre><span class="kw">ALTER TABLE</span> <span class="tbl">users</span> <span class="kw">ADD</span> <span class="col">phone</span> <span class="fn">VARCHAR</span>(<span class="nm">20</span>);
+<span class="kw">ALTER TABLE</span> <span class="tbl">users</span> <span class="kw">DROP COLUMN</span> <span class="col">phone</span>;
+<span class="kw">ALTER TABLE</span> <span class="tbl">users</span> <span class="kw">MODIFY COLUMN</span> <span class="col">name</span> <span class="fn">VARCHAR</span>(<span class="nm">200</span>);
+<span class="kw">ALTER TABLE</span> <span class="tbl">users</span> <span class="kw">RENAME COLUMN</span> <span class="col">name</span> <span class="kw">TO</span> <span class="col">full_name</span>;
+<span class="kw">ALTER TABLE</span> <span class="tbl">users</span> <span class="kw">RENAME TO</span> <span class="tbl">customers</span>;</pre></div>
+  </div>
+</section>
+
+<!-- S2 -->
+<section class="cs-section" id="cs2">
+  <div class="cs-section-header"><span class="cs-num">02</span><h2>Data Types</h2><span class="cs-tag">COLUMN TYPES</span></div>
+  <div class="cs-cards">
+    <div class="cs-card"><div class="cmd-name">Numeric</div><pre><span class="fn">INT</span>            <span class="cm">-- integer</span>
+<span class="fn">BIGINT</span>         <span class="cm">-- large integer</span>
+<span class="fn">FLOAT</span>          <span class="cm">-- floating point</span>
+<span class="fn">DECIMAL</span>(<span class="nm">10</span>,<span class="nm">2</span>)  <span class="cm">-- exact decimal</span>
+<span class="fn">BOOLEAN</span>        <span class="cm">-- 0 or 1</span></pre></div>
+    <div class="cs-card"><div class="cmd-name">String</div><pre><span class="fn">CHAR</span>(<span class="nm">n</span>)       <span class="cm">-- fixed length</span>
+<span class="fn">VARCHAR</span>(<span class="nm">n</span>)    <span class="cm">-- variable length</span>
+<span class="fn">TEXT</span>          <span class="cm">-- up to 65k chars</span>
+<span class="fn">LONGTEXT</span>      <span class="cm">-- up to 4 GB</span>
+<span class="fn">ENUM</span>(<span class="str">'a'</span>,<span class="str">'b'</span>) <span class="cm">-- one from list</span></pre></div>
+    <div class="cs-card"><div class="cmd-name">Date & Time</div><pre><span class="fn">DATE</span>       <span class="cm">-- YYYY-MM-DD</span>
+<span class="fn">TIME</span>       <span class="cm">-- HH:MM:SS</span>
+<span class="fn">DATETIME</span>   <span class="cm">-- date + time</span>
+<span class="fn">TIMESTAMP</span>  <span class="cm">-- auto-updates</span>
+<span class="fn">YEAR</span>       <span class="cm">-- 1901–2155</span></pre></div>
+    <div class="cs-card"><div class="cmd-name">Other</div><pre><span class="fn">BLOB</span>   <span class="cm">-- binary data</span>
+<span class="fn">JSON</span>   <span class="cm">-- native JSON (5.7+)</span>
+<span class="fn">BIT</span>(<span class="nm">n</span>) <span class="cm">-- bit field</span></pre></div>
+  </div>
+</section>
+
+<!-- S3 -->
+<section class="cs-section" id="cs3">
+  <div class="cs-section-header"><span class="cs-num">03</span><h2>CRUD — INSERT, UPDATE, DELETE</h2><span class="cs-tag">DML</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><div class="cmd-name">INSERT INTO</div><pre><span class="kw">INSERT INTO</span> <span class="tbl">users</span> (<span class="col">name</span>, <span class="col">email</span>) <span class="kw">VALUES</span> (<span class="str">'Alice'</span>, <span class="str">'alice@mail.com'</span>);
+<span class="cm">-- Multiple rows</span>
+<span class="kw">INSERT INTO</span> <span class="tbl">users</span> (<span class="col">name</span>, <span class="col">email</span>) <span class="kw">VALUES</span> (<span class="str">'Bob'</span>, <span class="str">'bob@mail.com'</span>), (<span class="str">'Carol'</span>, <span class="str">'carol@mail.com'</span>);
+<span class="cm">-- From SELECT</span>
+<span class="kw">INSERT INTO</span> <span class="tbl">archive</span> <span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">users</span> <span class="kw">WHERE</span> <span class="col">age</span> > <span class="nm">60</span>;</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">UPDATE</div><div class="cmd-desc">Modify rows. Always use WHERE!</div><pre><span class="kw">UPDATE</span> <span class="tbl">users</span> <span class="kw">SET</span> <span class="col">age</span> = <span class="nm">29</span>, <span class="col">email</span> = <span class="str">'new@mail.com'</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="nm">1</span>;
+<span class="kw">UPDATE</span> <span class="tbl">products</span> <span class="kw">SET</span> <span class="col">price</span> = <span class="col">price</span> * <span class="nm">1.10</span> <span class="kw">WHERE</span> <span class="col">category</span> = <span class="str">'electronics'</span>;</pre><div class="tip">Never run UPDATE without WHERE in production!</div></div>
+    <div class="cs-card wide"><div class="cmd-name">DELETE</div><pre><span class="kw">DELETE FROM</span> <span class="tbl">users</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="nm">5</span>;
+<span class="kw">DELETE FROM</span> <span class="tbl">orders</span> <span class="kw">WHERE</span> <span class="col">status</span> = <span class="str">'cancelled'</span>;</pre></div>
+  </div>
+</section>
+
+<!-- S4 -->
+<section class="cs-section" id="cs4">
+  <div class="cs-section-header"><span class="cs-num">04</span><h2>SELECT & Filtering</h2><span class="cs-tag">QUERYING</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><div class="cmd-name">SELECT Basics</div><pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">users</span>;
+<span class="kw">SELECT</span> <span class="col">name</span>, <span class="col">email</span> <span class="kw">FROM</span> <span class="tbl">users</span>;
+<span class="kw">SELECT DISTINCT</span> <span class="col">city</span> <span class="kw">FROM</span> <span class="tbl">users</span>;
+<span class="kw">SELECT</span> <span class="col">name</span> <span class="kw">AS</span> <span class="str">'Customer'</span> <span class="kw">FROM</span> <span class="tbl">users</span>;</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">WHERE Operators</div><pre><span class="kw">WHERE</span> <span class="col">age</span> = <span class="nm">28</span>   <span class="kw">WHERE</span> <span class="col">age</span> != <span class="nm">28</span>   <span class="kw">WHERE</span> <span class="col">age</span> > <span class="nm">18</span>
+<span class="kw">WHERE</span> <span class="col">age</span> <span class="kw">BETWEEN</span> <span class="nm">18</span> <span class="kw">AND</span> <span class="nm">30</span>
+<span class="kw">WHERE</span> <span class="col">city</span> <span class="kw">IN</span> (<span class="str">'NY'</span>, <span class="str">'LA'</span>)
+<span class="kw">WHERE</span> <span class="col">phone</span> <span class="kw">IS NULL</span>   <span class="kw">WHERE</span> <span class="col">phone</span> <span class="kw">IS NOT NULL</span>
+<span class="kw">WHERE</span> <span class="col">name</span> <span class="kw">LIKE</span> <span class="str">'A%'</span>       <span class="cm">-- starts with A</span>
+<span class="kw">WHERE</span> <span class="col">email</span> <span class="kw">LIKE</span> <span class="str">'%@gmail%'</span>  <span class="cm">-- contains @gmail</span></pre></div>
+    <div class="cs-card wide"><div class="cmd-name">CASE Expression</div><pre><span class="kw">SELECT</span> <span class="col">name</span>,
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> <span class="col">age</span> &lt; <span class="nm">18</span> <span class="kw">THEN</span> <span class="str">'Minor'</span>
+    <span class="kw">WHEN</span> <span class="col">age</span> <span class="kw">BETWEEN</span> <span class="nm">18</span> <span class="kw">AND</span> <span class="nm">64</span> <span class="kw">THEN</span> <span class="str">'Adult'</span>
+    <span class="kw">ELSE</span> <span class="str">'Senior'</span>
+  <span class="kw">END AS</span> <span class="col">age_group</span>
+<span class="kw">FROM</span> <span class="tbl">users</span>;</pre></div>
+  </div>
+</section>
+
+<!-- S5 -->
+<section class="cs-section" id="cs5">
+  <div class="cs-section-header"><span class="cs-num">05</span><h2>ORDER BY, LIMIT & OFFSET</h2><span class="cs-tag">SORTING</span></div>
+  <div class="cs-cards">
+    <div class="cs-card"><div class="cmd-name">ORDER BY</div><pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">users</span> <span class="kw">ORDER BY</span> <span class="col">name</span> <span class="kw">ASC</span>;
+<span class="kw">ORDER BY</span> <span class="col">total</span> <span class="kw">DESC</span>, <span class="col">date</span> <span class="kw">ASC</span>;</pre></div>
+    <div class="cs-card"><div class="cmd-name">LIMIT & OFFSET</div><pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="tbl">users</span> <span class="kw">LIMIT</span> <span class="nm">10</span>;
+<span class="cm">-- Page 3 (rows 21–30)</span>
+<span class="kw">LIMIT</span> <span class="nm">10</span> <span class="kw">OFFSET</span> <span class="nm">20</span>;</pre></div>
+  </div>
+</section>
+
+<!-- S6 -->
+<section class="cs-section" id="cs6">
+  <div class="cs-section-header"><span class="cs-num">06</span><h2>Aggregate Functions</h2><span class="cs-tag">SUMMARY</span></div>
+  <div class="cs-cards">
+    <div class="cs-card"><div class="cmd-name">COUNT</div><pre><span class="fn">COUNT</span>(*)                  <span class="cm">-- all rows</span>
+<span class="fn">COUNT</span>(<span class="col">email</span>)             <span class="cm">-- non-NULL only</span>
+<span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> <span class="col">city</span>)   <span class="cm">-- unique only</span></pre></div>
+    <div class="cs-card"><div class="cmd-name">SUM / AVG</div><pre><span class="fn">SUM</span>(<span class="col">total</span>)
+<span class="fn">AVG</span>(<span class="col">price</span>)
+<span class="fn">ROUND</span>(<span class="fn">AVG</span>(<span class="col">salary</span>), <span class="nm">2</span>)</pre></div>
+    <div class="cs-card"><div class="cmd-name">MIN / MAX</div><pre><span class="fn">MIN</span>(<span class="col">price</span>)
+<span class="fn">MAX</span>(<span class="col">salary</span>)
+<span class="fn">MIN</span>(<span class="col">order_date</span>)</pre></div>
+  </div>
+</section>
+
+<!-- S7 -->
+<section class="cs-section" id="cs7">
+  <div class="cs-section-header"><span class="cs-num">07</span><h2>GROUP BY & HAVING</h2><span class="cs-tag">GROUPING</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><div class="cmd-name">GROUP BY</div><pre><span class="kw">SELECT</span> <span class="col">city</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total <span class="kw">FROM</span> <span class="tbl">users</span> <span class="kw">GROUP BY</span> <span class="col">city</span>;
+<span class="kw">SELECT</span> <span class="col">dept</span>, <span class="fn">AVG</span>(<span class="col">salary</span>) <span class="kw">AS</span> avg_sal <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">GROUP BY</span> <span class="col">dept</span>;</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">HAVING</div><div class="cmd-desc">Filter groups (like WHERE but for aggregates).</div><pre><span class="kw">SELECT</span> <span class="col">dept</span>, <span class="fn">SUM</span>(<span class="col">salary</span>) <span class="kw">AS</span> total
+<span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">active</span> = <span class="nm">1</span>            <span class="cm">-- filter rows first</span>
+<span class="kw">GROUP BY</span> <span class="col">dept</span>
+<span class="kw">HAVING</span> total > <span class="nm">500000</span>;      <span class="cm">-- then filter groups</span></pre></div>
+  </div>
+</section>
+
+<!-- S8 -->
+<section class="cs-section" id="cs8">
+  <div class="cs-section-header"><span class="cs-num">08</span><h2>JOINs</h2><span class="cs-tag">COMBINING TABLES</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><div class="cmd-name">INNER JOIN</div><pre><span class="kw">SELECT</span> u.<span class="col">name</span>, o.<span class="col">total</span>
+<span class="kw">FROM</span> <span class="tbl">users</span> u <span class="kw">INNER JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> u.<span class="col">id</span> = o.<span class="col">user_id</span>;</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">LEFT JOIN</div><div class="cmd-desc">All from left + matching from right. NULL if no match.</div><pre><span class="kw">SELECT</span> u.<span class="col">name</span>, o.<span class="col">total</span>
+<span class="kw">FROM</span> <span class="tbl">users</span> u <span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> u.<span class="col">id</span> = o.<span class="col">user_id</span>;
+<span class="cm">-- Find users with NO orders:</span>
+<span class="kw">WHERE</span> o.<span class="col">id</span> <span class="kw">IS NULL</span></pre></div>
+    <div class="cs-card"><div class="cmd-name">RIGHT JOIN</div><pre><span class="kw">FROM</span> <span class="tbl">users</span> u <span class="kw">RIGHT JOIN</span> <span class="tbl">orders</span> o
+<span class="kw">ON</span> u.<span class="col">id</span> = o.<span class="col">user_id</span>;</pre></div>
+    <div class="cs-card"><div class="cmd-name">SELF JOIN</div><pre><span class="kw">SELECT</span> e.<span class="col">name</span>, m.<span class="col">name</span> <span class="kw">AS</span> mgr
+<span class="kw">FROM</span> <span class="tbl">employees</span> e
+<span class="kw">JOIN</span> <span class="tbl">employees</span> m <span class="kw">ON</span> e.<span class="col">manager_id</span> = m.<span class="col">id</span>;</pre></div>
+  </div>
+</section>
+
+<!-- S9 -->
+<section class="cs-section" id="cs9">
+  <div class="cs-section-header"><span class="cs-num">09</span><h2>Subqueries & CTEs</h2><span class="cs-tag">NESTED QUERIES</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><div class="cmd-name">Subquery in WHERE</div><pre><span class="kw">SELECT</span> <span class="col">name</span>, <span class="col">salary</span> <span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">salary</span> > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(<span class="col">salary</span>) <span class="kw">FROM</span> <span class="tbl">employees</span>);</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">EXISTS / IN</div><pre><span class="cm">-- IN</span>
+<span class="kw">WHERE</span> <span class="col">id</span> <span class="kw">IN</span> (<span class="kw">SELECT</span> <span class="col">user_id</span> <span class="kw">FROM</span> <span class="tbl">orders</span>)
+<span class="cm">-- EXISTS (faster for large data)</span>
+<span class="kw">WHERE EXISTS</span> (<span class="kw">SELECT</span> <span class="nm">1</span> <span class="kw">FROM</span> <span class="tbl">orders</span> o <span class="kw">WHERE</span> o.<span class="col">user_id</span> = u.<span class="col">id</span>)</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">CTE (WITH clause)</div><div class="cmd-desc">Named temp result set — cleaner than nested subqueries.</div><pre><span class="kw">WITH</span> high_earners <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="col">name</span>, <span class="col">salary</span>, <span class="col">dept</span>
+  <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">WHERE</span> <span class="col">salary</span> > <span class="nm">80000</span>
+)
+<span class="kw">SELECT</span> <span class="col">dept</span>, <span class="fn">COUNT</span>(*) <span class="kw">FROM</span> high_earners <span class="kw">GROUP BY</span> <span class="col">dept</span>;</pre></div>
+  </div>
+</section>
+
+<!-- S10 -->
+<section class="cs-section" id="cs10">
+  <div class="cs-section-header"><span class="cs-num">10</span><h2>String Functions</h2><span class="cs-tag">TEXT</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="fn">CONCAT</span>(<span class="str">'Hello'</span>, <span class="str">' World'</span>)       <span class="cm">-- 'Hello World'</span>
+<span class="fn">LENGTH</span>(<span class="str">'hello'</span>)                  <span class="cm">-- 5</span>
+<span class="fn">UPPER</span>(<span class="str">'hello'</span>)  <span class="fn">LOWER</span>(<span class="str">'HELLO'</span>)
+<span class="fn">TRIM</span>(<span class="str">'  hello  '</span>)               <span class="cm">-- 'hello'</span>
+<span class="fn">SUBSTRING</span>(<span class="str">'hello'</span>, <span class="nm">2</span>, <span class="nm">3</span>)        <span class="cm">-- 'ell'</span>
+<span class="fn">REPLACE</span>(<span class="str">'foo bar'</span>, <span class="str">'bar'</span>, <span class="str">'baz'</span>)<span class="cm">-- 'foo baz'</span>
+<span class="fn">INSTR</span>(<span class="str">'hello'</span>, <span class="str">'ll'</span>)             <span class="cm">-- 3</span>
+<span class="fn">LPAD</span>(<span class="str">'5'</span>, <span class="nm">3</span>, <span class="str">'0'</span>)               <span class="cm">-- '005'</span>
+<span class="fn">REVERSE</span>(<span class="str">'hello'</span>)                <span class="cm">-- 'olleh'</span></pre></div>
+  </div>
+</section>
+
+<!-- S11 -->
+<section class="cs-section" id="cs11">
+  <div class="cs-section-header"><span class="cs-num">11</span><h2>Date & Time Functions</h2><span class="cs-tag">TEMPORAL</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="fn">NOW</span>()                                  <span class="cm">-- current datetime</span>
+<span class="fn">CURDATE</span>()                              <span class="cm">-- current date</span>
+<span class="fn">YEAR</span>(<span class="col">date</span>)  <span class="fn">MONTH</span>(<span class="col">date</span>)  <span class="fn">DAY</span>(<span class="col">date</span>)
+<span class="fn">DATEDIFF</span>(<span class="fn">NOW</span>(), <span class="col">join_date</span>)            <span class="cm">-- days between</span>
+<span class="fn">DATE_ADD</span>(<span class="fn">NOW</span>(), <span class="kw">INTERVAL</span> <span class="nm">7</span> <span class="kw">DAY</span>)
+<span class="fn">DATE_SUB</span>(<span class="fn">NOW</span>(), <span class="kw">INTERVAL</span> <span class="nm">1</span> <span class="kw">MONTH</span>)
+<span class="fn">DATE_FORMAT</span>(<span class="fn">NOW</span>(), <span class="str">'%d-%m-%Y'</span>)</pre></div>
+  </div>
+</section>
+
+<!-- S12 -->
+<section class="cs-section" id="cs12">
+  <div class="cs-section-header"><span class="cs-num">12</span><h2>Numeric Functions</h2><span class="cs-tag">MATH</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="fn">ROUND</span>(<span class="nm">3.456</span>, <span class="nm">2</span>) <span class="cm">-- 3.46</span>   <span class="fn">FLOOR</span>(<span class="nm">3.9</span>) <span class="cm">-- 3</span>   <span class="fn">CEIL</span>(<span class="nm">3.1</span>) <span class="cm">-- 4</span>
+<span class="fn">ABS</span>(<span class="nm">-5</span>) <span class="cm">-- 5</span>   <span class="fn">MOD</span>(<span class="nm">10</span>,<span class="nm">3</span>) <span class="cm">-- 1</span>   <span class="fn">POWER</span>(<span class="nm">2</span>,<span class="nm">10</span>) <span class="cm">-- 1024</span>   <span class="fn">SQRT</span>(<span class="nm">144</span>) <span class="cm">-- 12</span></pre></div>
+  </div>
+</section>
+
+<!-- S13 -->
+<section class="cs-section" id="cs13">
+  <div class="cs-section-header"><span class="cs-num">13</span><h2>Constraints</h2><span class="cs-tag">DATA INTEGRITY</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="col">id</span>     <span class="fn">INT</span> <span class="kw">PRIMARY KEY</span>                          <span class="cm">-- unique identifier</span>
+<span class="col">uid</span>    <span class="fn">INT</span>, <span class="kw">FOREIGN KEY</span>(<span class="col">uid</span>) <span class="kw">REFERENCES</span> <span class="tbl">users</span>(<span class="col">id</span>)  <span class="cm">-- link tables</span>
+<span class="col">name</span>   <span class="fn">VARCHAR</span>(<span class="nm">100</span>) <span class="kw">NOT NULL</span>                     <span class="cm">-- can't be empty</span>
+<span class="col">email</span>  <span class="fn">VARCHAR</span>(<span class="nm">150</span>) <span class="kw">UNIQUE</span>                       <span class="cm">-- no duplicates</span>
+<span class="col">status</span> <span class="fn">VARCHAR</span>(<span class="nm">20</span>) <span class="kw">DEFAULT</span> <span class="str">'active'</span>              <span class="cm">-- fallback value</span>
+<span class="col">age</span>    <span class="fn">INT</span>, <span class="kw">CHECK</span>(<span class="col">age</span> >= <span class="nm">0</span> <span class="kw">AND</span> <span class="col">age</span> &lt;= <span class="nm">150</span>)      <span class="cm">-- validate</span></pre></div>
+  </div>
+</section>
+
+<!-- S14 -->
+<section class="cs-section" id="cs14">
+  <div class="cs-section-header"><span class="cs-num">14</span><h2>Indexes</h2><span class="cs-tag">PERFORMANCE</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="kw">CREATE INDEX</span> idx_email <span class="kw">ON</span> <span class="tbl">users</span>(<span class="col">email</span>);
+<span class="kw">CREATE UNIQUE INDEX</span> idx_phone <span class="kw">ON</span> <span class="tbl">users</span>(<span class="col">phone</span>);
+<span class="kw">CREATE INDEX</span> idx_city_age <span class="kw">ON</span> <span class="tbl">users</span>(<span class="col">city</span>, <span class="col">age</span>);  <span class="cm">-- composite</span>
+<span class="kw">DROP INDEX</span> idx_email <span class="kw">ON</span> <span class="tbl">users</span>;
+<span class="kw">SHOW INDEX FROM</span> <span class="tbl">users</span>;</pre><div class="tip">Use EXPLAIN SELECT to verify an index is being hit.</div></div>
+  </div>
+</section>
+
+<!-- S15 -->
+<section class="cs-section" id="cs15">
+  <div class="cs-section-header"><span class="cs-num">15</span><h2>Views</h2><span class="cs-tag">VIRTUAL TABLES</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="kw">CREATE VIEW</span> active_users <span class="kw">AS</span>
+  <span class="kw">SELECT</span> <span class="col">id</span>, <span class="col">name</span>, <span class="col">email</span> <span class="kw">FROM</span> <span class="tbl">users</span> <span class="kw">WHERE</span> <span class="col">status</span> = <span class="str">'active'</span>;
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> active_users;   <span class="cm">-- use like a table</span>
+<span class="kw">DROP VIEW</span> active_users;</pre></div>
+  </div>
+</section>
+
+<!-- S16 -->
+<section class="cs-section" id="cs16">
+  <div class="cs-section-header"><span class="cs-num">16</span><h2>Stored Procedures</h2><span class="cs-tag">REUSABLE SQL</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="kw">DELIMITER</span> $$
+<span class="kw">CREATE PROCEDURE</span> <span class="fn">dept_stats</span>(<span class="kw">IN</span> <span class="col">dept_name</span> <span class="fn">VARCHAR</span>(<span class="nm">50</span>))
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> <span class="fn">COUNT</span>(*) <span class="kw">AS</span> headcount, <span class="fn">AVG</span>(<span class="col">salary</span>) <span class="kw">AS</span> avg_sal
+  <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">WHERE</span> <span class="col">dept</span> = dept_name;
+<span class="kw">END</span>$$
+<span class="kw">DELIMITER</span> ;
+<span class="kw">CALL</span> <span class="fn">dept_stats</span>(<span class="str">'Engineering'</span>);</pre></div>
+  </div>
+</section>
+
+<!-- S17 -->
+<section class="cs-section" id="cs17">
+  <div class="cs-section-header"><span class="cs-num">17</span><h2>Triggers</h2><span class="cs-tag">AUTO-EXECUTE</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="kw">DELIMITER</span> $$
+<span class="kw">CREATE TRIGGER</span> log_salary
+<span class="kw">BEFORE UPDATE ON</span> <span class="tbl">employees</span> <span class="kw">FOR EACH ROW</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">IF</span> OLD.<span class="col">salary</span> != NEW.<span class="col">salary</span> <span class="kw">THEN</span>
+    <span class="kw">INSERT INTO</span> <span class="tbl">salary_log</span> (<span class="col">emp_id</span>, <span class="col">old_sal</span>, <span class="col">new_sal</span>)
+    <span class="kw">VALUES</span> (OLD.<span class="col">id</span>, OLD.<span class="col">salary</span>, NEW.<span class="col">salary</span>);
+  <span class="kw">END IF</span>;
+<span class="kw">END</span>$$</pre></div>
+  </div>
+</section>
+
+<!-- S18 -->
+<section class="cs-section" id="cs18">
+  <div class="cs-section-header"><span class="cs-num">18</span><h2>Transactions</h2><span class="cs-tag">ACID</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="kw">START TRANSACTION</span>;
+<span class="kw">UPDATE</span> <span class="tbl">accounts</span> <span class="kw">SET</span> <span class="col">balance</span> = <span class="col">balance</span> - <span class="nm">500</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="nm">1</span>;
+<span class="kw">UPDATE</span> <span class="tbl">accounts</span> <span class="kw">SET</span> <span class="col">balance</span> = <span class="col">balance</span> + <span class="nm">500</span> <span class="kw">WHERE</span> <span class="col">id</span> = <span class="nm">2</span>;
+<span class="kw">COMMIT</span>;    <span class="cm">-- save</span>
+<span class="kw">ROLLBACK</span>; <span class="cm">-- undo on error</span></pre><div class="tip">ACID: Atomicity · Consistency · Isolation · Durability</div></div>
+  </div>
+</section>
+
+<!-- S19 -->
+<section class="cs-section" id="cs19">
+  <div class="cs-section-header"><span class="cs-num">19</span><h2>Users & Permissions</h2><span class="cs-tag">DCL</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><pre><span class="kw">CREATE USER</span> <span class="str">'dev'</span>@<span class="str">'localhost'</span> <span class="kw">IDENTIFIED BY</span> <span class="str">'pass'</span>;
+<span class="kw">GRANT SELECT, INSERT ON</span> mydb.* <span class="kw">TO</span> <span class="str">'dev'</span>@<span class="str">'localhost'</span>;
+<span class="kw">GRANT ALL PRIVILEGES ON</span> *.* <span class="kw">TO</span> <span class="str">'admin'</span>@<span class="str">'%'</span>;
+<span class="kw">REVOKE SELECT ON</span> mydb.* <span class="kw">FROM</span> <span class="str">'dev'</span>@<span class="str">'localhost'</span>;
+<span class="kw">DROP USER</span> <span class="str">'dev'</span>@<span class="str">'localhost'</span>;</pre></div>
+  </div>
+</section>
+
+<!-- S20 -->
+<section class="cs-section" id="cs20">
+  <div class="cs-section-header"><span class="cs-num">20</span><h2>Window Functions</h2><span class="cs-tag">ANALYTICS</span></div>
+  <div class="cs-cards">
+    <div class="cs-card wide"><div class="cmd-name">RANK / DENSE_RANK / ROW_NUMBER</div><pre><span class="kw">SELECT</span> <span class="col">name</span>, <span class="col">dept</span>, <span class="col">salary</span>,
+  <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> <span class="col">dept</span> <span class="kw">ORDER BY</span> <span class="col">salary</span> <span class="kw">DESC</span>) <span class="kw">AS</span> rank
+<span class="kw">FROM</span> <span class="tbl">employees</span>;</pre></div>
+    <div class="cs-card wide"><div class="cmd-name">LAG / LEAD</div><pre><span class="fn">LAG</span>(<span class="col">salary</span>)  <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">hire_date</span>)  <span class="cm">-- previous row's value</span>
+<span class="fn">LEAD</span>(<span class="col">salary</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="col">hire_date</span>)  <span class="cm">-- next row's value</span></pre></div>
+    <div class="cs-card wide"><div class="cmd-name">UNION / UNION ALL</div><pre><span class="kw">SELECT</span> <span class="col">name</span> <span class="kw">FROM</span> <span class="tbl">customers</span>
+<span class="kw">UNION</span>       <span class="cm">-- removes duplicates</span>
+<span class="kw">SELECT</span> <span class="col">name</span> <span class="kw">FROM</span> <span class="tbl">suppliers</span>;</pre></div>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section class="cs-section" id="practice">
+  <div class="cs-section-header"><span class="cs-num">🎯</span><h2>Practice Questions</h2><span class="cs-tag">PLACEMENT PREP</span></div>
+
+  <div class="progress-box">
+    <div class="progress-row"><span id="prog-text">0 / 5 solved</span><span id="prog-pct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="prog-bar"></div></div>
+  </div>
+
+  <div class="section-label">── EASY ──</div>
+  <div class="cs-card wide difficulty-easy" style="margin-bottom:0.75rem">
+    <div class="q-num">Q1 · EASY</div><div class="q-text">Find employees with salary > 50,000.</div>
+    <div style="display:flex;gap:0.5rem"><button class="reveal-btn" onclick="toggleAns('a1',this)">👁 Show Answer</button><button class="mark-done-btn" id="mark1" onclick="markQ(1)">✓ Mark Done</button></div>
+    <div class="answer-box" id="a1"><pre><span class="kw">SELECT</span> <span class="col">name</span>, <span class="col">salary</span> <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">WHERE</span> <span class="col">salary</span> > <span class="nm">50000</span> <span class="kw">ORDER BY</span> <span class="col">salary</span> <span class="kw">DESC</span>;</pre></div>
+  </div>
+  <div class="cs-card wide difficulty-easy" style="margin-bottom:0.75rem">
+    <div class="q-num">Q2 · EASY</div><div class="q-text">Count employees per department.</div>
+    <div style="display:flex;gap:0.5rem"><button class="reveal-btn" onclick="toggleAns('a2',this)">👁 Show Answer</button><button class="mark-done-btn" id="mark2" onclick="markQ(2)">✓ Mark Done</button></div>
+    <div class="answer-box" id="a2"><pre><span class="kw">SELECT</span> <span class="col">dept</span>, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> total <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">GROUP BY</span> <span class="col">dept</span>;</pre></div>
+  </div>
+
+  <div class="section-label">── MEDIUM ──</div>
+  <div class="cs-card wide difficulty-medium" style="margin-bottom:0.75rem">
+    <div class="q-num">Q3 · MEDIUM</div><div class="q-text">Find departments with average salary > 60,000.</div>
+    <div style="display:flex;gap:0.5rem"><button class="reveal-btn" onclick="toggleAns('a3',this)">👁 Show Answer</button><button class="mark-done-btn" id="mark3" onclick="markQ(3)">✓ Mark Done</button></div>
+    <div class="answer-box" id="a3"><pre><span class="kw">SELECT</span> <span class="col">dept</span>, <span class="fn">AVG</span>(<span class="col">salary</span>) <span class="kw">AS</span> avg_sal <span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">GROUP BY</span> <span class="col">dept</span> <span class="kw">HAVING</span> <span class="fn">AVG</span>(<span class="col">salary</span>) > <span class="nm">60000</span>;</pre></div>
+  </div>
+  <div class="cs-card wide difficulty-medium" style="margin-bottom:0.75rem">
+    <div class="q-num">Q4 · MEDIUM</div><div class="q-text">Find customers who have NEVER placed an order.</div>
+    <div style="display:flex;gap:0.5rem"><button class="reveal-btn" onclick="toggleAns('a4',this)">👁 Show Answer</button><button class="mark-done-btn" id="mark4" onclick="markQ(4)">✓ Mark Done</button></div>
+    <div class="answer-box" id="a4"><pre><span class="kw">SELECT</span> c.<span class="col">name</span> <span class="kw">FROM</span> <span class="tbl">customers</span> c
+<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> c.<span class="col">id</span> = o.<span class="col">customer_id</span>
+<span class="kw">WHERE</span> o.<span class="col">id</span> <span class="kw">IS NULL</span>;</pre></div>
+  </div>
+
+  <div class="section-label">── HARD ──</div>
+  <div class="cs-card wide difficulty-hard" style="margin-bottom:0.75rem">
+    <div class="q-num">Q5 · HARD</div><div class="q-text">Find the second highest salary (show 2 methods).</div>
+    <div style="display:flex;gap:0.5rem"><button class="reveal-btn" onclick="toggleAns('a5',this)">👁 Show Answer</button><button class="mark-done-btn" id="mark5" onclick="markQ(5)">✓ Mark Done</button></div>
+    <div class="answer-box" id="a5"><pre><span class="cm">-- Method 1</span>
+<span class="kw">SELECT DISTINCT</span> <span class="col">salary</span> <span class="kw">FROM</span> <span class="tbl">employees</span> <span class="kw">ORDER BY</span> <span class="col">salary</span> <span class="kw">DESC LIMIT</span> <span class="nm">1</span> <span class="kw">OFFSET</span> <span class="nm">1</span>;
+<span class="cm">-- Method 2</span>
+<span class="kw">SELECT</span> <span class="fn">MAX</span>(<span class="col">salary</span>) <span class="kw">FROM</span> <span class="tbl">employees</span>
+<span class="kw">WHERE</span> <span class="col">salary</span> &lt; (<span class="kw">SELECT</span> <span class="fn">MAX</span>(<span class="col">salary</span>) <span class="kw">FROM</span> <span class="tbl">employees</span>);</pre></div>
+  </div>
+</section>
+
+<script>
+const TOTAL = 5;
+const done = new Set();
+function toggleAns(id, btn) {
+  const box = document.getElementById(id);
+  box.classList.toggle('open');
+  btn.textContent = box.classList.contains('open') ? '🙈 Hide Answer' : '👁 Show Answer';
+}
+function markQ(n) {
+  const btn = document.getElementById('mark' + n);
+  done.has(n) ? done.delete(n) : done.add(n);
+  btn.classList.toggle('done', done.has(n));
+  btn.textContent = done.has(n) ? '✅ Done!' : '✓ Mark Done';
+  const pct = Math.round(done.size / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = done.size + ' / ' + TOTAL + ' solved';
+  document.getElementById('prog-pct').textContent = pct + '%';
+}
+</script>

@@ -1,0 +1,355 @@
+<div class="cs-badge">REFERENCE GUIDE</div>
+<h1 class="cs-title">OOP in Python</h1>
+<p class="cs-subtitle">// Object-Oriented Programming · Classes · Inheritance · Polymorphism · Complete Reference</p>
+
+<nav class="cs-toc">
+  <h3>TABLE OF CONTENTS</h3>
+  <a href="#s1">1. What is OOP?</a>
+  <a href="#s2">2. Classes &amp; Objects</a>
+  <a href="#s3">3. __init__ &amp; self</a>
+  <a href="#s4">4. Instance vs Class Variables</a>
+  <a href="#s5">5. Methods</a>
+  <a href="#s6">6. Encapsulation</a>
+  <a href="#s7">7. Getters, Setters &amp; @property</a>
+  <a href="#s8">8. Inheritance</a>
+  <a href="#s9">9. super()</a>
+  <a href="#s10">10. Multiple Inheritance</a>
+  <a href="#s11">11. Polymorphism</a>
+  <a href="#s12">12. Abstraction</a>
+  <a href="#s13">13. Dunder / Magic Methods</a>
+  <a href="#s14">14. Composition vs Inheritance</a>
+  <a href="#s15">15. Static &amp; Class Methods</a>
+  <a href="#s16">16. Real-World Example</a>
+  <a href="#s17">17. OOP Best Practices</a>
+  <a href="#s18">18. Quick Reference Cheat Sheet</a>
+  <a href="#s19">19. Practice Questions</a>
+</nav>
+
+<!-- S1 -->
+<section class="cs-section" id="s1">
+  <div class="cs-section-header">
+    <span class="cs-num">01</span>
+    <h2>What is OOP?</h2>
+    <span class="cs-tag">FUNDAMENTALS</span>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card cs-card.wide">
+      <div class="cmd-name">Object-Oriented Programming</div>
+      <div class="cmd-desc">OOP is a programming style where you organize code around <strong style="color:var(--accent)">objects</strong> — things that bundle together data (attributes) and actions (methods). Instead of writing a long list of instructions, you model real-world entities.</div>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">The 4 Pillars of OOP</div>
+      <div class="cmd-desc">Every OOP language is built on these four core ideas:</div>
+      <div class="pillar-grid">
+        <div class="pillar">
+          <div class="pillar-title">Encapsulation</div>
+          <div class="pillar-desc">Keep data safe inside an object. Control how it's accessed.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-title">Inheritance</div>
+          <div class="pillar-desc">A child class gets features from a parent class.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-title">Polymorphism</div>
+          <div class="pillar-desc">Same method name, different behavior in different classes.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-title">Abstraction</div>
+          <div class="pillar-desc">Hide complexity. Show only what's needed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S2 -->
+<section class="cs-section" id="s2">
+  <div class="cs-section-header">
+    <span class="cs-num">02</span>
+    <h2>Classes &amp; Objects</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Class = Blueprint</div>
+      <div class="cmd-desc">A class defines the structure. No real data yet — just a template.</div>
+      <pre><span class="kw">class</span> <span class="cls">Dog</span>:
+    <span class="kw">pass</span></pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">Object = Instance</div>
+      <div class="cmd-desc">Creating an object from a class is called instantiation.</div>
+      <pre><span class="var">dog1</span> = <span class="cls">Dog</span>()
+<span class="var">dog2</span> = <span class="cls">Dog</span>()</pre>
+    </div>
+  </div>
+</section>
+
+<!-- S3 -->
+<section class="cs-section" id="s3">
+  <div class="cs-section-header">
+    <span class="cs-num">03</span>
+    <h2>__init__ &amp; self</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">__init__ Constructor</div>
+      <div class="cmd-desc">Runs automatically when you create a new object. Sets up initial data.</div>
+      <pre><span class="kw">class</span> <span class="cls">Person</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">name</span>, <span class="var">age</span>):
+        <span class="var">self</span>.name = <span class="var">name</span>
+        <span class="var">self</span>.age  = <span class="var">age</span></pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">self — The Object Itself</div>
+      <div class="cmd-desc">self refers to the current instance. It lets each object keep its own data separate from others.</div>
+      <pre><span class="var">self</span>.count += <span class="nm">1</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- S4 -->
+<section class="cs-section" id="s4">
+  <div class="cs-section-header">
+    <span class="cs-num">04</span>
+    <h2>Instance vs Class Variables</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Instance Variables</div>
+      <div class="cmd-desc">Belong to a specific object. Each object has its own copy.</div>
+      <pre><span class="var">self</span>.name = <span class="var">name</span></pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">Class Variables</div>
+      <div class="cmd-desc">Belong to the class itself. Shared by ALL objects.</div>
+      <pre><span class="kw">class</span> <span class="cls">Employee</span>:
+    company = <span class="str">"TechCorp"</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- S5 -->
+<section class="cs-section" id="s5">
+  <div class="cs-section-header">
+    <span class="cs-num">05</span>
+    <h2>Methods</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Instance Method</div>
+      <div class="cmd-desc">The most common type. Takes self. Can read and change instance data.</div>
+      <pre><span class="kw">def</span> <span class="fn">deposit</span>(<span class="var">self</span>, <span class="var">amount</span>):
+    <span class="var">self</span>.balance += <span class="var">amount</span></pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">@classmethod</div>
+      <div class="cmd-desc">Takes cls instead of self. Often used as alternative constructors.</div>
+      <pre><span class="deco">@classmethod</span>
+<span class="kw">def</span> <span class="fn">from_string</span>(<span class="var">cls</span>, <span class="var">s</span>):
+    <span class="kw">return</span> <span class="var">cls</span>(...)</pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">@staticmethod</div>
+      <div class="cmd-desc">No self or cls. Just a regular utility function.</div>
+      <pre><span class="deco">@staticmethod</span>
+<span class="kw">def</span> <span class="fn">add</span>(<span class="var">a</span>, <span class="var">b</span>):
+    <span class="kw">return</span> <span class="var">a</span> + <span class="var">b</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- S6 -->
+<section class="cs-section" id="s6">
+  <div class="cs-section-header">
+    <span class="cs-num">06</span>
+    <h2>Encapsulation</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Access Levels</div>
+      <div class="cmd-desc">Python uses naming conventions to signal access levels.</div>
+      <table>
+        <tr><th>Notation</th><th>Level</th><th>Meaning</th></tr>
+        <tr><td>name</td><td>Public</td><td>Anyone can access</td></tr>
+        <tr><td>_name</td><td>Protected</td><td>"Handle with care"</td></tr>
+        <tr><td>__name</td><td>Private</td><td>Name-mangled — hidden</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- S7 -->
+<section class="cs-section" id="s7">
+  <div class="cs-section-header">
+    <span class="cs-num">07</span>
+    <h2>@property</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Pythonic Getters/Setters</div>
+      <div class="cmd-desc">Make private attributes feel like public ones. Clean and Pythonic.</div>
+      <pre><span class="deco">@property</span>
+<span class="kw">def</span> <span class="fn">age</span>(<span class="var">self</span>):
+    <span class="kw">return</span> <span class="var">self</span>.__age
+
+<span class="deco">@age.setter</span>
+<span class="kw">def</span> <span class="fn">age</span>(<span class="var">self</span>, <span class="var">value</span>):
+    <span class="kw">if</span> <span class="var">value</span> > <span class="nm">0</span>:
+        <span class="var">self</span>.__age = <span class="var">value</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- S8 -->
+<section class="cs-section" id="s8">
+  <div class="cs-section-header">
+    <span class="cs-num">08</span>
+    <h2>Inheritance</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Basic Inheritance</div>
+      <div class="cmd-desc">A child class automatically gets all attributes and methods from the parent.</div>
+      <pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
+    <span class="kw">def</span> <span class="fn">fetch</span>(<span class="var">self</span>):
+        <span class="fn">print</span>(<span class="str">"Fetching!"</span>)</pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">Method Overriding</div>
+      <div class="cmd-desc">A child class can replace a parent method.</div>
+      <pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
+    <span class="kw">def</span> <span class="fn">speak</span>(<span class="var">self</span>):
+        <span class="fn">print</span>(<span class="str">"Woof!"</span>)</pre>
+    </div>
+  </div>
+</section>
+
+<!-- S9 -->
+<section class="cs-section" id="s9">
+  <div class="cs-section-header">
+    <span class="cs-num">09</span>
+    <h2>super()</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Calling the Parent Class</div>
+      <div class="cmd-desc">super() lets the child class call a method from the parent class.</div>
+      <pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">name</span>, <span class="var">breed</span>):
+        <span class="fn">super</span>().__init__(<span class="var">name</span>)
+        <span class="var">self</span>.breed = <span class="var">breed</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- S10 -->
+<section class="cs-section" id="s10">
+  <div class="cs-section-header">
+    <span class="cs-num">10</span>
+    <h2>Multiple Inheritance</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Multiple Parents</div>
+      <div class="cmd-desc">A class can inherit from more than one parent.</div>
+      <pre><span class="kw">class</span> <span class="cls">Duck</span>(<span class="cls">Flyable</span>, <span class="cls">Swimmable</span>):
+    <span class="kw">pass</span></pre>
+    </div>
+    <div class="cs-card">
+      <div class="cmd-name">MRO</div>
+      <div class="cmd-desc">Method Resolution Order determines which method is called.</div>
+      <pre><span class="fn">print</span>(<span class="cls">Duck</span>.__mro__)</pre>
+    </div>
+  </div>
+</section>
+
+<!-- S11 -->
+<section class="cs-section" id="s11">
+  <div class="cs-section-header">
+    <span class="cs-num">11</span>
+    <h2>Polymorphism</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Method Polymorphism</div>
+      <div class="cmd-desc">Different classes define the same method name. Python calls the right one for each object.</div>
+      <pre><span class="kw">for</span> <span class="var">a</span> <span class="kw">in</span> [<span class="cls">Dog</span>(), <span class="cls">Cat</span>()]:
+    <span class="var">a</span>.speak()</pre>
+    </div>
+  </div>
+</section>
+
+<!-- S12 -->
+<section class="cs-section" id="s12">
+  <div class="cs-section-header">
+    <span class="cs-num">12</span>
+    <h2>Abstraction</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Abstract Classes</div>
+      <div class="cmd-desc">Forces every child class to implement specific methods.</div>
+      <pre><span class="kw">from</span> abc <span class="kw">import</span> ABC, abstractmethod
+
+<span class="kw">class</span> <span class="cls">Shape</span>(<span class="cls">ABC</span>):
+    <span class="deco">@abstractmethod</span>
+    <span class="kw">def</span> <span class="fn">area</span>(<span class="var">self</span>): <span class="kw">pass</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- S13 -->
+<section class="cs-section" id="s13">
+  <div class="cs-section-header">
+    <span class="cs-num">13</span>
+    <h2>Dunder / Magic Methods</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">What are Dunders?</div>
+      <div class="cmd-desc">Methods with double underscores. Python calls them automatically in certain situations.</div>
+      <pre><span class="kw">def</span> <span class="fn">__str__</span>(<span class="var">self</span>):
+    <span class="kw">return</span> <span class="fn">f</span><span class="str">"{self.title}"</span>
+
+<span class="kw">def</span> <span class="fn">__add__</span>(<span class="var">self</span>, <span class="var">o</span>):
+    <span class="kw">return</span> <span class="nm">...</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- S14 -->
+<section class="cs-section" id="s14">
+  <div class="cs-section-header">
+    <span class="cs-num">14</span>
+    <h2>Composition vs Inheritance</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Composition — Has-A</div>
+      <div class="cmd-desc">Build complex objects from simpler ones.</div>
+      <pre><span class="kw">class</span> <span class="cls">Car</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>):
+        <span class="var">self</span>.engine = <span class="cls">Engine</span>()</span></pre>
+      <div class="tip">General rule: Favour composition over inheritance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- S15 -->
+<section class="cs-section" id="s15">
+  <div class="cs-section-header">
+    <span class="cs-num">15</span>
+    <h2>Best Practices</h2>
+  </div>
+  <div class="cs-cards">
+    <div class="cs-card">
+      <div class="cmd-name">Naming Conventions</div>
+      <div class="cmd-desc">Follow Python's standard naming rules for readable code.</div>
+      <div class="concept-box">
+        <strong>Classes:</strong> PascalCase — <code>class BankAccount:</code><br><br>
+        <strong>Methods &amp; Variables:</strong> snake_case — <code>def get_balance():</code><br><br>
+        <strong>Constants:</strong> ALL_CAPS — <code>MAX_LIMIT = 10000</code>
+      </div>
+    </div>
+  </div>
+</section>

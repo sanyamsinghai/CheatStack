@@ -1,355 +1,422 @@
-<div class="cs-badge">REFERENCE GUIDE</div>
-<h1 class="cs-title">OOP in Python</h1>
-<p class="cs-subtitle">// Object-Oriented Programming · Classes · Inheritance · Polymorphism · Complete Reference</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP in Python Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a; --panel: #0f1629; --border: #1e2d4a; --accent: #00d4ff; --accent2: #ff6b35; --accent3: #7fff6b;
+    --text: #c8d8f0; --muted: #5a7298; --keyword: #ff79c6; --func: #50fa7b; --string: #f1fa8c; --comment: #6272a4; --number: #bd93f9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; line-height: 1.6; padding: 2rem; min-height: 100vh; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.3; pointer-events: none; z-index: 0; }
+  .container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
+  header { text-align: center; padding: 3rem 0 2rem; border-bottom: 1px solid var(--border); margin-bottom: 3rem; }
+  header .badge { display: inline-block; background: var(--accent); color: #000; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem; letter-spacing: 0.2em; margin-bottom: 1rem; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); }
+  header h1 { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1; background: linear-gradient(135deg, #fff 30%, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  header p { margin-top: 0.75rem; color: var(--muted); font-size: 1rem; font-family: 'JetBrains Mono', monospace; }
+  .toc { background: var(--panel); border: 1px solid var(--border); border-top: 3px solid var(--accent); padding: 1.5rem 2rem; margin-bottom: 3rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem 2rem; }
+  .toc h3 { grid-column: 1 / -1; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem; }
+  .toc a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; font-family: 'JetBrains Mono', monospace; }
+  .toc a:hover { color: var(--accent); }
+  .section { margin-bottom: 3rem; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .section-number { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent2); font-weight: 700; opacity: 0.7; }
+  .section-header h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.01em; color: #fff; }
+  .section-header .tag { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); border: 1px solid var(--border); padding: 0.2rem 0.5rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; }
+  .card { background: var(--panel); border: 1px solid var(--border); padding: 1.25rem 1.5rem; transition: border-color 0.2s, transform 0.2s; position: relative; }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--accent); opacity: 0; transition: opacity 0.2s; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+  .card.wide { grid-column: 1 / -1; }
+  .cmd-name { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 700; color: var(--accent); margin-bottom: 0.4rem; }
+  .cmd-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.75rem; line-height: 1.5; }
+  pre { background: #060a14; border: 1px solid var(--border); padding: 0.75rem 1rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; line-height: 1.7; border-radius: 2px; }
+  .kw  { color: var(--keyword); font-weight: 700; } .fn  { color: var(--func); } .str { color: var(--string); } .cm  { color: var(--comment); font-style: italic; } .nm  { color: var(--number); } .cls { color: var(--accent2); } .var { color: var(--accent); } .deco { color: #ffb86c; }
+  .tip { background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); padding: 0.75rem 1rem; margin-top: 0.75rem; font-size: 0.78rem; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+  .tip::before { content: '💡 '; }
+  .warn { background: rgba(255, 107, 53, 0.05); border: 1px solid rgba(255, 107, 53, 0.25); padding: 0.75rem 1rem; margin-top: 0.75rem; font-size: 0.78rem; color: var(--accent2); font-family: 'JetBrains Mono', monospace; }
+  .warn::before { content: '⚠️  '; }
+  table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; margin-top: 0.75rem; }
+  th { background: rgba(0,212,255,0.08); color: var(--accent); padding: 0.5rem 0.75rem; text-align: left; border: 1px solid var(--border); font-weight: 700; letter-spacing: 0.05em; }
+  td { padding: 0.5rem 0.75rem; border: 1px solid var(--border); color: var(--text); }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .concept-box { background: #060a14; border: 1px solid var(--border); border-left: 3px solid var(--accent3); padding: 1rem 1.25rem; margin-top: 0.75rem; font-size: 0.85rem; line-height: 1.7; color: var(--text); }
+  .pillar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 0.75rem; }
+  .pillar { background: #060a14; border: 1px solid var(--border); border-top: 2px solid var(--accent2); padding: 0.75rem 1rem; text-align: center; }
+  .pillar-title { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 700; color: var(--accent2); margin-bottom: 0.35rem; }
+  .pillar-desc { font-size: 0.75rem; color: var(--muted); }
+  .q-card { background: var(--panel); border: 1px solid var(--border); padding: 1.25rem 1.5rem; margin-bottom: 1rem; position: relative; }
+  .q-card.difficulty-easy  { border-left: 3px solid var(--accent3); }
+  .q-card.difficulty-medium { border-left: 3px solid var(--accent); }
+  .q-card.difficulty-hard  { border-left: 3px solid var(--accent2); }
+  .q-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; }
+  .q-num { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-bottom: 0.25rem; letter-spacing: 0.1em; }
+  .q-text { font-size: 0.95rem; font-weight: 700; color: #fff; }
+  .diff-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; white-space: nowrap; }
+  .badge-easy   { background: rgba(127,255,107,0.15); color: var(--accent3); border: 1px solid var(--accent3); }
+  .badge-medium { background: rgba(0,212,255,0.1);    color: var(--accent);  border: 1px solid var(--accent); }
+  .badge-hard   { background: rgba(255,107,53,0.1);   color: var(--accent2); border: 1px solid var(--accent2); }
+  .q-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.85rem; }
+  .q-tag  { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.15rem 0.5rem; background: rgba(0,212,255,0.05); border: 1px solid var(--border); color: var(--muted); }
+  .btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .hint-btn, .sol-btn, .mark-btn { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; padding: 0.35rem 0.85rem; border: 1px solid; cursor: pointer; background: transparent; font-weight: 700; transition: all 0.2s; }
+  .hint-btn { border-color: var(--accent);  color: var(--accent);  }
+  .hint-btn:hover { background: rgba(0,212,255,0.1); }
+  .sol-btn  { border-color: var(--accent3); color: var(--accent3); }
+  .sol-btn:hover  { background: rgba(127,255,107,0.1); }
+  .mark-btn { border-color: var(--muted);   color: var(--muted);   }
+  .mark-btn.done  { border-color: var(--accent3); color: var(--accent3); background: rgba(127,255,107,0.08); }
+  .hint-box, .sol-box { display: none; margin-top: 0.75rem; }
+  .hint-box { background: rgba(0,212,255,0.04); border: 1px solid rgba(0,212,255,0.2); padding: 0.75rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--accent); line-height: 1.6; }
+  .sol-box { background: #060a14; border: 1px solid var(--border); }
+  .sol-box pre { border: none; margin: 0; }
+  .progress-wrap { background: var(--panel); border: 1px solid var(--border); padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+  .progress-label { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .progress-track { background: var(--border); height: 6px; width: 100%; position: relative; }
+  .progress-fill  { background: var(--accent3); height: 100%; width: 0%; transition: width 0.4s; }
+  #progress-text  { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent3); margin-top: 0.4rem; }
+  footer { text-align: center; padding: 2rem 0; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+  @media (max-width: 600px) { body { padding: 1rem; } .cards { grid-template-columns: 1fr; } .pillar-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="badge">REFERENCE GUIDE</div>
+    <h1>OOP in Python</h1>
+    <p>// Object-Oriented Programming · Classes · Inheritance · Polymorphism · Complete Reference</p>
+  </header>
+  <nav class="toc">
+    <h3>TABLE OF CONTENTS</h3>
+    <a href="#s1">1. What is OOP?</a> <a href="#s2">2. Classes &amp; Objects</a> <a href="#s3">3. __init__ &amp; self</a> <a href="#s4">4. Instance vs Class Variables</a> <a href="#s5">5. Methods</a> <a href="#s6">6. Encapsulation</a> <a href="#s7">7. Getters, Setters &amp; @property</a> <a href="#s8">8. Inheritance</a> <a href="#s9">9. super()</a> <a href="#s10">10. Multiple Inheritance</a> <a href="#s11">11. Polymorphism</a> <a href="#s12">12. Abstraction</a> <a href="#s13">13. Dunder / Magic Methods</a> <a href="#s14">14. Composition vs Inheritance</a> <a href="#s15">15. Static &amp; Class Methods</a> <a href="#s16">16. Real-World Example</a> <a href="#s17">17. OOP Best Practices</a> <a href="#s18">18. Quick Reference Cheat Sheet</a> <a href="#s19">19. Practice Questions</a>
+  </nav>
 
-<nav class="cs-toc">
-  <h3>TABLE OF CONTENTS</h3>
-  <a href="#s1">1. What is OOP?</a>
-  <a href="#s2">2. Classes &amp; Objects</a>
-  <a href="#s3">3. __init__ &amp; self</a>
-  <a href="#s4">4. Instance vs Class Variables</a>
-  <a href="#s5">5. Methods</a>
-  <a href="#s6">6. Encapsulation</a>
-  <a href="#s7">7. Getters, Setters &amp; @property</a>
-  <a href="#s8">8. Inheritance</a>
-  <a href="#s9">9. super()</a>
-  <a href="#s10">10. Multiple Inheritance</a>
-  <a href="#s11">11. Polymorphism</a>
-  <a href="#s12">12. Abstraction</a>
-  <a href="#s13">13. Dunder / Magic Methods</a>
-  <a href="#s14">14. Composition vs Inheritance</a>
-  <a href="#s15">15. Static &amp; Class Methods</a>
-  <a href="#s16">16. Real-World Example</a>
-  <a href="#s17">17. OOP Best Practices</a>
-  <a href="#s18">18. Quick Reference Cheat Sheet</a>
-  <a href="#s19">19. Practice Questions</a>
-</nav>
-
-<!-- S1 -->
-<section class="cs-section" id="s1">
-  <div class="cs-section-header">
-    <span class="cs-num">01</span>
-    <h2>What is OOP?</h2>
-    <span class="cs-tag">FUNDAMENTALS</span>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card cs-card.wide">
-      <div class="cmd-name">Object-Oriented Programming</div>
-      <div class="cmd-desc">OOP is a programming style where you organize code around <strong style="color:var(--accent)">objects</strong> — things that bundle together data (attributes) and actions (methods). Instead of writing a long list of instructions, you model real-world entities.</div>
-    </div>
-    <div class="cs-card">
-      <div class="cmd-name">The 4 Pillars of OOP</div>
-      <div class="cmd-desc">Every OOP language is built on these four core ideas:</div>
-      <div class="pillar-grid">
-        <div class="pillar">
-          <div class="pillar-title">Encapsulation</div>
-          <div class="pillar-desc">Keep data safe inside an object. Control how it's accessed.</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-title">Inheritance</div>
-          <div class="pillar-desc">A child class gets features from a parent class.</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-title">Polymorphism</div>
-          <div class="pillar-desc">Same method name, different behavior in different classes.</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-title">Abstraction</div>
-          <div class="pillar-desc">Hide complexity. Show only what's needed.</div>
+  <section class="section" id="s1">
+    <div class="section-header"><span class="section-number">01</span><h2>What is OOP?</h2><span class="tag">FUNDAMENTALS</span></div>
+    <div class="cards">
+      <div class="card wide">
+        <div class="cmd-name">Object-Oriented Programming</div>
+        <div class="cmd-desc">OOP is a programming style where you organize code around <strong>objects</strong> — things that bundle together data (attributes) and actions (methods).</div>
+        <div class="concept-box"><strong>Procedural:</strong> Code is a sequence of steps.<br><strong>OOP:</strong> Data and functions packaged together inside an object.</div>
+      </div>
+      <div class="card">
+        <div class="cmd-name">The 4 Pillars of OOP</div>
+        <div class="pillar-grid">
+          <div class="pillar"><div class="pillar-title">Encapsulation</div><div class="pillar-desc">Keep data safe inside an object. Control how it's accessed.</div></div>
+          <div class="pillar"><div class="pillar-title">Inheritance</div><div class="pillar-desc">A child class gets features from a parent class.</div></div>
+          <div class="pillar"><div class="pillar-title">Polymorphism</div><div class="pillar-desc">Same method name, different behavior in different classes.</div></div>
+          <div class="pillar"><div class="pillar-title">Abstraction</div><div class="pillar-desc">Hide complexity. Show only what's needed.</div></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S2 -->
-<section class="cs-section" id="s2">
-  <div class="cs-section-header">
-    <span class="cs-num">02</span>
-    <h2>Classes &amp; Objects</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Class = Blueprint</div>
-      <div class="cmd-desc">A class defines the structure. No real data yet — just a template.</div>
-      <pre><span class="kw">class</span> <span class="cls">Dog</span>:
-    <span class="kw">pass</span></pre>
+  <section class="section" id="s2">
+    <div class="section-header"><span class="section-number">02</span><h2>Classes &amp; Objects</h2><span class="tag">CORE CONCEPT</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Class = Blueprint</div><div class="cmd-desc">A class defines the structure. No real data yet — just a template.</div><pre><span class="kw">class</span> <span class="cls">Dog</span>:
+    <span class="kw">pass</span></pre></div>
+      <div class="card"><div class="cmd-name">Object = Instance</div><div class="cmd-desc">Creating an object from a class is called instantiation.</div><pre><span class="var">dog1</span> = <span class="cls">Dog</span>()
+<span class="var">dog2</span> = <span class="cls">Dog</span>()</pre></div>
     </div>
-    <div class="cs-card">
-      <div class="cmd-name">Object = Instance</div>
-      <div class="cmd-desc">Creating an object from a class is called instantiation.</div>
-      <pre><span class="var">dog1</span> = <span class="cls">Dog</span>()
-<span class="var">dog2</span> = <span class="cls">Dog</span>()</pre>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- S3 -->
-<section class="cs-section" id="s3">
-  <div class="cs-section-header">
-    <span class="cs-num">03</span>
-    <h2>__init__ &amp; self</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">__init__ Constructor</div>
-      <div class="cmd-desc">Runs automatically when you create a new object. Sets up initial data.</div>
-      <pre><span class="kw">class</span> <span class="cls">Person</span>:
+  <section class="section" id="s3">
+    <div class="section-header"><span class="section-number">03</span><h2>__init__ &amp; self</h2><span class="tag">CONSTRUCTOR</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">__init__ — The Constructor</div><div class="cmd-desc">Runs automatically when you create a new object. Sets up initial data.</div><pre><span class="kw">class</span> <span class="cls">Person</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">name</span>, <span class="var">age</span>):
         <span class="var">self</span>.name = <span class="var">name</span>
-        <span class="var">self</span>.age  = <span class="var">age</span></pre>
+        <span class="var">self</span>.age  = <span class="var">age</span></pre><div class="tip">__init__ is called automatically — you never call it manually.</div></div>
+      <div class="card"><div class="cmd-name">self — The Object Itself</div><div class="cmd-desc">self refers to the current instance. It lets each object keep its own data separate from others.</div><pre><span class="var">self</span>.count += <span class="nm">1</span></pre><div class="warn">self must always be the first parameter of every method.</div></div>
     </div>
-    <div class="cs-card">
-      <div class="cmd-name">self — The Object Itself</div>
-      <div class="cmd-desc">self refers to the current instance. It lets each object keep its own data separate from others.</div>
-      <pre><span class="var">self</span>.count += <span class="nm">1</span></pre>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- S4 -->
-<section class="cs-section" id="s4">
-  <div class="cs-section-header">
-    <span class="cs-num">04</span>
-    <h2>Instance vs Class Variables</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Instance Variables</div>
-      <div class="cmd-desc">Belong to a specific object. Each object has its own copy.</div>
-      <pre><span class="var">self</span>.name = <span class="var">name</span></pre>
+  <section class="section" id="s4">
+    <div class="section-header"><span class="section-number">04</span><h2>Instance vs Class Variables</h2><span class="tag">VARIABLES</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Instance Variables</div><div class="cmd-desc">Belong to a specific object. Each object has its own copy.</div><pre><span class="var">self</span>.name = <span class="var">name</span></pre></div>
+      <div class="card"><div class="cmd-name">Class Variables</div><div class="cmd-desc">Belong to the class itself. Shared by ALL objects. Defined outside __init__.</div><pre><span class="kw">class</span> <span class="cls">Employee</span>:
+    company = <span class="str">"TechCorp"</span></pre><div class="tip">Change a class variable via ClassName.var — not self.var — to affect ALL instances.</div></div>
     </div>
-    <div class="cs-card">
-      <div class="cmd-name">Class Variables</div>
-      <div class="cmd-desc">Belong to the class itself. Shared by ALL objects.</div>
-      <pre><span class="kw">class</span> <span class="cls">Employee</span>:
-    company = <span class="str">"TechCorp"</span></pre>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- S5 -->
-<section class="cs-section" id="s5">
-  <div class="cs-section-header">
-    <span class="cs-num">05</span>
-    <h2>Methods</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Instance Method</div>
-      <div class="cmd-desc">The most common type. Takes self. Can read and change instance data.</div>
-      <pre><span class="kw">def</span> <span class="fn">deposit</span>(<span class="var">self</span>, <span class="var">amount</span>):
-    <span class="var">self</span>.balance += <span class="var">amount</span></pre>
-    </div>
-    <div class="cs-card">
-      <div class="cmd-name">@classmethod</div>
-      <div class="cmd-desc">Takes cls instead of self. Often used as alternative constructors.</div>
-      <pre><span class="deco">@classmethod</span>
+  <section class="section" id="s5">
+    <div class="section-header"><span class="section-number">05</span><h2>Methods</h2><span class="tag">INSTANCE · CLASS · STATIC</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Instance Method</div><div class="cmd-desc">Most common. Takes self. Can read and change instance data.</div><pre><span class="kw">def</span> <span class="fn">deposit</span>(<span class="var">self</span>, <span class="var">amount</span>):
+    <span class="var">self</span>.balance += <span class="var">amount</span></pre></div>
+      <div class="card"><div class="cmd-name">@classmethod</div><div class="cmd-desc">Takes cls instead of self. Often used as alternative constructors.</div><pre><span class="deco">@classmethod</span>
 <span class="kw">def</span> <span class="fn">from_string</span>(<span class="var">cls</span>, <span class="var">s</span>):
-    <span class="kw">return</span> <span class="var">cls</span>(...)</pre>
-    </div>
-    <div class="cs-card">
-      <div class="cmd-name">@staticmethod</div>
-      <div class="cmd-desc">No self or cls. Just a regular utility function.</div>
-      <pre><span class="deco">@staticmethod</span>
+    <span class="kw">return</span> <span class="var">cls</span>(...)</pre></div>
+      <div class="card"><div class="cmd-name">@staticmethod</div><div class="cmd-desc">No self or cls. Just a utility function grouped inside the class.</div><pre><span class="deco">@staticmethod</span>
 <span class="kw">def</span> <span class="fn">add</span>(<span class="var">a</span>, <span class="var">b</span>):
-    <span class="kw">return</span> <span class="var">a</span> + <span class="var">b</span></pre>
+    <span class="kw">return</span> <span class="var">a</span> + <span class="var">b</span></pre></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S6 -->
-<section class="cs-section" id="s6">
-  <div class="cs-section-header">
-    <span class="cs-num">06</span>
-    <h2>Encapsulation</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Access Levels</div>
-      <div class="cmd-desc">Python uses naming conventions to signal access levels.</div>
-      <table>
-        <tr><th>Notation</th><th>Level</th><th>Meaning</th></tr>
-        <tr><td>name</td><td>Public</td><td>Anyone can access</td></tr>
-        <tr><td>_name</td><td>Protected</td><td>"Handle with care"</td></tr>
-        <tr><td>__name</td><td>Private</td><td>Name-mangled — hidden</td></tr>
-      </table>
+  <section class="section" id="s6">
+    <div class="section-header"><span class="section-number">06</span><h2>Encapsulation</h2><span class="tag">DATA PROTECTION</span></div>
+    <div class="cards">
+      <div class="card wide"><div class="cmd-name">The Idea: Protect Your Data</div><div class="cmd-desc">Encapsulation bundles data and methods and restricts direct access. Python uses naming conventions.</div><table><tr><th>Notation</th><th>Level</th><th>Meaning</th></tr><tr><td>name</td><td>Public</td><td>Anyone can access</td></tr><tr><td>_name</td><td>Protected</td><td>"Handle with care"</td></tr><tr><td>__name</td><td>Private</td><td>Name-mangled — hidden</td></tr></table><div class="warn">Python doesn't enforce access like Java/C++. __name becomes _ClassName__name internally.</div></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S7 -->
-<section class="cs-section" id="s7">
-  <div class="cs-section-header">
-    <span class="cs-num">07</span>
-    <h2>@property</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Pythonic Getters/Setters</div>
-      <div class="cmd-desc">Make private attributes feel like public ones. Clean and Pythonic.</div>
-      <pre><span class="deco">@property</span>
+  <section class="section" id="s7">
+    <div class="section-header"><span class="section-number">07</span><h2>@property — Pythonic Getters/Setters</h2><span class="tag">ENCAPSULATION</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Pythonic Way</div><div class="cmd-desc">Access private data like a normal attribute while still having validation.</div><pre><span class="deco">@property</span>
 <span class="kw">def</span> <span class="fn">age</span>(<span class="var">self</span>):
     <span class="kw">return</span> <span class="var">self</span>.__age
 
 <span class="deco">@age.setter</span>
 <span class="kw">def</span> <span class="fn">age</span>(<span class="var">self</span>, <span class="var">value</span>):
     <span class="kw">if</span> <span class="var">value</span> > <span class="nm">0</span>:
-        <span class="var">self</span>.__age = <span class="var">value</span></pre>
+        <span class="var">self</span>.__age = <span class="var">value</span></pre><div class="tip">@property makes private attributes feel like public ones. Clean and Pythonic.</div></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S8 -->
-<section class="cs-section" id="s8">
-  <div class="cs-section-header">
-    <span class="cs-num">08</span>
-    <h2>Inheritance</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Basic Inheritance</div>
-      <div class="cmd-desc">A child class automatically gets all attributes and methods from the parent.</div>
-      <pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
-    <span class="kw">def</span> <span class="fn">fetch</span>(<span class="var">self</span>):
-        <span class="fn">print</span>(<span class="str">"Fetching!"</span>)</pre>
-    </div>
-    <div class="cs-card">
-      <div class="cmd-name">Method Overriding</div>
-      <div class="cmd-desc">A child class can replace a parent method.</div>
-      <pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
+  <section class="section" id="s8">
+    <div class="section-header"><span class="section-number">08</span><h2>Inheritance</h2><span class="tag">IS-A RELATIONSHIP</span></div>
+    <div class="cards">
+      <div class="card wide"><div class="cmd-name">Basic Inheritance</div><div class="cmd-desc">A child class automatically gets all attributes and methods from the parent class.</div><pre><span class="kw">class</span> <span class="cls">Animal</span>:
+    <span class="kw">def</span> <span class="fn">speak</span>(<span class="var">self</span>): <span class="fn">print</span>(<span class="str">"Some sound"</span>)
+
+<span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
+    <span class="kw">pass</span>  <span class="cm"># inherits speak() automatically</span></pre></div>
+      <div class="card"><div class="cmd-name">Method Overriding</div><div class="cmd-desc">A child class can replace a parent method by defining one with the same name.</div><pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
     <span class="kw">def</span> <span class="fn">speak</span>(<span class="var">self</span>):
-        <span class="fn">print</span>(<span class="str">"Woof!"</span>)</pre>
+        <span class="fn">print</span>(<span class="str">"Woof!"</span>)</pre></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S9 -->
-<section class="cs-section" id="s9">
-  <div class="cs-section-header">
-    <span class="cs-num">09</span>
-    <h2>super()</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Calling the Parent Class</div>
-      <div class="cmd-desc">super() lets the child class call a method from the parent class.</div>
-      <pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
+  <section class="section" id="s9">
+    <div class="section-header"><span class="section-number">09</span><h2>super()</h2><span class="tag">INHERITANCE</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Calling the Parent Class</div><div class="cmd-desc">super() lets the child class call a method from the parent class.</div><pre><span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">name</span>, <span class="var">breed</span>):
         <span class="fn">super</span>().__init__(<span class="var">name</span>)
-        <span class="var">self</span>.breed = <span class="var">breed</span></pre>
+        <span class="var">self</span>.breed = <span class="var">breed</span></pre><div class="tip">Always call super().__init__() in __init__ to avoid losing inherited attributes.</div></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S10 -->
-<section class="cs-section" id="s10">
-  <div class="cs-section-header">
-    <span class="cs-num">10</span>
-    <h2>Multiple Inheritance</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Multiple Parents</div>
-      <div class="cmd-desc">A class can inherit from more than one parent.</div>
-      <pre><span class="kw">class</span> <span class="cls">Duck</span>(<span class="cls">Flyable</span>, <span class="cls">Swimmable</span>):
-    <span class="kw">pass</span></pre>
-    </div>
-    <div class="cs-card">
-      <div class="cmd-name">MRO</div>
-      <div class="cmd-desc">Method Resolution Order determines which method is called.</div>
-      <pre><span class="fn">print</span>(<span class="cls">Duck</span>.__mro__)</pre>
-    </div>
-  </div>
-</section>
+  <section class="section" id="s10">
+    <div class="section-header"><span class="section-number">10</span><h2>Multiple Inheritance &amp; MRO</h2><span class="tag">ADVANCED</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Multiple Inheritance</div><div class="cmd-desc">A class can inherit from more than one parent.</div><pre><span class="kw">class</span> <span class="cls">Flyable</span>:
+    <span class="kw">def</span> <span class="fn">fly</span>(<span class="var">self</span>): <span class="fn">print</span>(<span class="str">"I can fly!"</span>)
 
-<!-- S11 -->
-<section class="cs-section" id="s11">
-  <div class="cs-section-header">
-    <span class="cs-num">11</span>
-    <h2>Polymorphism</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Method Polymorphism</div>
-      <div class="cmd-desc">Different classes define the same method name. Python calls the right one for each object.</div>
-      <pre><span class="kw">for</span> <span class="var">a</span> <span class="kw">in</span> [<span class="cls">Dog</span>(), <span class="cls">Cat</span>()]:
-    <span class="var">a</span>.speak()</pre>
+<span class="kw">class</span> <span class="cls">Duck</span>(<span class="cls">Flyable</span>, <span class="cls">Swimmable</span>):
+    <span class="kw">pass</span></pre></div>
+      <div class="card"><div class="cmd-name">MRO — Method Resolution Order</div><div class="cmd-desc">When a method exists in multiple parents, Python uses C3 linearization to decide which one to call.</div><pre><span class="fn">print</span>(<span class="cls">Duck</span>.__mro__)</pre><div class="tip">Python checks MRO left-to-right, depth-first. The first listed class wins.</div></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S12 -->
-<section class="cs-section" id="s12">
-  <div class="cs-section-header">
-    <span class="cs-num">12</span>
-    <h2>Abstraction</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Abstract Classes</div>
-      <div class="cmd-desc">Forces every child class to implement specific methods.</div>
-      <pre><span class="kw">from</span> abc <span class="kw">import</span> ABC, abstractmethod
+  <section class="section" id="s11">
+    <div class="section-header"><span class="section-number">11</span><h2>Polymorphism</h2><span class="tag">MANY FORMS</span></div>
+    <div class="cards">
+      <div class="card wide"><div class="cmd-name">Method Polymorphism</div><div class="cmd-desc">Different classes define the same method name — Python calls the right one for each object.</div><pre><span class="kw">for</span> <span class="var">a</span> <span class="kw">in</span> [<span class="cls">Dog</span>(), <span class="cls">Cat</span>(), <span class="cls">Cow</span>()]:
+    <span class="var">a</span>.speak()   <span class="cm"># Python picks the right speak() automatically!</span></pre><div class="tip">Polymorphism lets you write one loop for many different types. No if/elif checking needed.</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="s12">
+    <div class="section-header"><span class="section-number">12</span><h2>Abstraction</h2><span class="tag">HIDE COMPLEXITY</span></div>
+    <div class="cards">
+      <div class="card wide"><div class="cmd-name">Abstract Classes with ABC</div><div class="cmd-desc">An abstract class cannot be instantiated. It forces every child class to implement specific methods.</div><pre><span class="kw">from</span> abc <span class="kw">import</span> ABC, abstractmethod
 
 <span class="kw">class</span> <span class="cls">Shape</span>(<span class="cls">ABC</span>):
     <span class="deco">@abstractmethod</span>
-    <span class="kw">def</span> <span class="fn">area</span>(<span class="var">self</span>): <span class="kw">pass</span></pre>
+    <span class="kw">def</span> <span class="fn">area</span>(<span class="var">self</span>): <span class="kw">pass</span></pre><div class="warn">If a subclass doesn't implement all @abstractmethod methods, TypeError is thrown.</div></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S13 -->
-<section class="cs-section" id="s13">
-  <div class="cs-section-header">
-    <span class="cs-num">13</span>
-    <h2>Dunder / Magic Methods</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">What are Dunders?</div>
-      <div class="cmd-desc">Methods with double underscores. Python calls them automatically in certain situations.</div>
-      <pre><span class="kw">def</span> <span class="fn">__str__</span>(<span class="var">self</span>):
-    <span class="kw">return</span> <span class="fn">f</span><span class="str">"{self.title}"</span>
-
-<span class="kw">def</span> <span class="fn">__add__</span>(<span class="var">self</span>, <span class="var">o</span>):
-    <span class="kw">return</span> <span class="nm">...</span></pre>
+  <section class="section" id="s13">
+    <div class="section-header"><span class="section-number">13</span><h2>Dunder / Magic Methods</h2><span class="tag">__SPECIAL__</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">What are Dunder Methods?</div><div class="cmd-desc">Methods with double underscores. Python calls them automatically in certain situations.</div><pre><span class="kw">def</span> <span class="fn">__str__</span>(<span class="var">self</span>): <span class="kw">return</span> <span class="fn">f</span><span class="str">"{self.title}"</span>
+<span class="kw">def</span> <span class="fn">__add__</span>(<span class="var">self</span>, <span class="var">o</span>): <span class="kw">return</span> <span class="var">self</span>.value + <span class="var">o</span>.value
+<span class="kw">def</span> <span class="fn">__len__</span>(<span class="var">self</span>): <span class="kw">return</span> <span class="fn">len</span>(<span class="var">self</span>.items)</pre></div>
+      <div class="card wide"><div class="cmd-name">Common Dunder Methods</div><table><tr><th>Method</th><th>Triggered By</th><th>Purpose</th></tr><tr><td>__init__</td><td>ClassName()</td><td>Constructor — set up object</td></tr><tr><td>__str__</td><td>print(obj)</td><td>Human-friendly string</td></tr><tr><td>__add__</td><td>obj1 + obj2</td><td>Addition operator</td></tr><tr><td>__eq__</td><td>obj1 == obj2</td><td>Equality check</td></tr><tr><td>__len__</td><td>len(obj)</td><td>Length of object</td></tr><tr><td>__getitem__</td><td>obj[key]</td><td>Indexing</td></tr></table></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S14 -->
-<section class="cs-section" id="s14">
-  <div class="cs-section-header">
-    <span class="cs-num">14</span>
-    <h2>Composition vs Inheritance</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Composition — Has-A</div>
-      <div class="cmd-desc">Build complex objects from simpler ones.</div>
-      <pre><span class="kw">class</span> <span class="cls">Car</span>:
+  <section class="section" id="s14">
+    <div class="section-header"><span class="section-number">14</span><h2>Composition vs Inheritance</h2><span class="tag">DESIGN PATTERNS</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Composition — "Has-A"</div><div class="cmd-desc">Build complex objects from simpler ones. A Car HAS-A Engine.</div><pre><span class="kw">class</span> <span class="cls">Car</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>):
-        <span class="var">self</span>.engine = <span class="cls">Engine</span>()</span></pre>
-      <div class="tip">General rule: Favour composition over inheritance.</div>
+        <span class="var">self</span>.engine = <span class="cls">Engine</span>()  <span class="cm"># Has-A</span></pre><div class="tip">General rule: "Favour composition over inheritance."</div></div>
+      <div class="card"><div class="cmd-name">When to use which?</div><div class="cmd-desc">Inheritance = IS-A. Composition = HAS-A.</div><table><tr><th>Aspect</th><th>Inheritance</th><th>Composition</th></tr><tr><td>Coupling</td><td>Tight</td><td>Loose</td></tr><tr><td>Flexibility</td><td>Less</td><td>More</td></tr></table></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- S15 -->
-<section class="cs-section" id="s15">
-  <div class="cs-section-header">
-    <span class="cs-num">15</span>
-    <h2>Best Practices</h2>
-  </div>
-  <div class="cs-cards">
-    <div class="cs-card">
-      <div class="cmd-name">Naming Conventions</div>
-      <div class="cmd-desc">Follow Python's standard naming rules for readable code.</div>
-      <div class="concept-box">
-        <strong>Classes:</strong> PascalCase — <code>class BankAccount:</code><br><br>
-        <strong>Methods &amp; Variables:</strong> snake_case — <code>def get_balance():</code><br><br>
-        <strong>Constants:</strong> ALL_CAPS — <code>MAX_LIMIT = 10000</code>
-      </div>
+  <section class="section" id="s15">
+    <div class="section-header"><span class="section-number">15</span><h2>Static &amp; Class Methods (Deep Dive)</h2><span class="tag">DECORATORS</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Factory Pattern with @classmethod</div><div class="cmd-desc">Provide multiple ways to create an object.</div><pre><span class="kw">class</span> <span class="cls">Temperature</span>:
+    <span class="deco">@classmethod</span>
+    <span class="kw">def</span> <span class="fn">from_fahrenheit</span>(<span class="var">cls</span>, <span class="var">f</span>):
+        <span class="kw">return</span> <span class="var">cls</span>((<span class="var">f</span> - <span class="nm">32</span>) * <span class="nm">5</span>/<span class="nm">9</span>)</pre><div class="tip">@classmethod enables alternative constructors. Super useful!</div></div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="section" id="s16">
+    <div class="section-header"><span class="section-number">16</span><h2>Real-World Example</h2><span class="tag">FULL PROJECT</span></div>
+    <div class="cards">
+      <div class="card wide"><div class="cmd-name">Mini Banking System — All Concepts Combined</div><div class="cmd-desc">Uses: Abstract Class, Encapsulation, @property, Inheritance, super(), Polymorphism.</div><pre><span class="kw">from</span> abc <span class="kw">import</span> ABC, abstractmethod
+
+<span class="kw">class</span> <span class="cls">Account</span>(<span class="cls">ABC</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">owner</span>, <span class="var">balance</span>=<span class="nm">0</span>):
+        <span class="var">self</span>.owner = <span class="var">owner</span>
+        <span class="var">self</span>.__balance = <span class="var">balance</span>   <span class="cm"># private</span>
+
+    <span class="deco">@property</span>
+    <span class="kw">def</span> <span class="fn">balance</span>(<span class="var">self</span>): <span class="kw">return</span> <span class="var">self</span>.__balance
+
+    <span class="kw">def</span> <span class="fn">deposit</span>(<span class="var">self</span>, <span class="var">amt</span>):
+        <span class="kw">if</span> <span class="var">amt</span> > <span class="nm">0</span>: <span class="var">self</span>.__balance += <span class="var">amt</span>
+
+    <span class="deco">@abstractmethod</span>
+    <span class="kw">def</span> <span class="fn">account_type</span>(<span class="var">self</span>): <span class="kw">pass</span>
+
+<span class="kw">class</span> <span class="cls">Savings</span>(<span class="cls">Account</span>):
+    <span class="kw">def</span> <span class="fn">account_type</span>(<span class="var">self</span>): <span class="kw">return</span> <span class="str">"Savings"</span>
+
+<span class="var">s</span> = <span class="cls">Savings</span>(<span class="str">"Alice"</span>, <span class="nm">1000</span>)
+<span class="var">s</span>.deposit(<span class="nm">500</span>)
+<span class="fn">print</span>(<span class="var">s</span>.balance)  <span class="cm"># 1500</span></pre></div>
+    </div>
+  </section>
+
+  <section class="section" id="s17">
+    <div class="section-header"><span class="section-number">17</span><h2>OOP Best Practices</h2><span class="tag">TIPS</span></div>
+    <div class="cards">
+      <div class="card"><div class="cmd-name">Naming Conventions</div><div class="cmd-desc">Follow Python's standard naming rules for readable code.</div><div class="concept-box"><strong>Classes:</strong> PascalCase<br><strong>Methods/Variables:</strong> snake_case<br><strong>Constants:</strong> ALL_CAPS<br><strong>Private:</strong> __ prefix</div></div>
+      <div class="card"><div class="cmd-name">Common OOP Mistakes</div><div class="cmd-desc">Things that trip up beginners:</div><div class="concept-box"><strong>1. Forgetting self:</strong> All instance methods need self<br><strong>2. Forgetting super().__init__():</strong> Inherited attrs won't exist<br><strong>3. Mutable defaults:</strong> Never use [] or {} in __init__<br><strong>4. Over-using inheritance:</strong> Favour composition</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="s18">
+    <div class="section-header"><span class="section-number">18</span><h2>Quick Reference Cheat Sheet</h2><span class="tag">SUMMARY</span></div>
+    <div class="cards">
+      <div class="card wide"><div class="cmd-name">Everything at a Glance</div><table><tr><th>Concept</th><th>Syntax</th><th>What it Does</th></tr><tr><td>Class</td><td>class ClassName:</td><td>Define a blueprint</td></tr><tr><td>Object</td><td>obj = ClassName()</td><td>Create an instance</td></tr><tr><td>Constructor</td><td>def __init__(self, ...)</td><td>Set up the object</td></tr><tr><td>Instance var</td><td>self.name = value</td><td>Data unique to each object</td></tr><tr><td>Class var</td><td>ClassName.var = value</td><td>Shared by all objects</td></tr><tr><td>Encapsulation</td><td>self.__attr</td><td>Protect data</td></tr><tr><td>@property</td><td>@property / @x.setter</td><td>Pythonic getter/setter</td></tr><tr><td>Inheritance</td><td>class Child(Parent):</td><td>Reuse parent's code</td></tr><tr><td>super()</td><td>super().__init__(...)</td><td>Call parent's method</td></tr><tr><td>Polymorphism</td><td>(no keyword)</td><td>Same method, diff behavior</td></tr><tr><td>@classmethod</td><td>@classmethod + cls</td><td>Method for the class itself</td></tr><tr><td>@staticmethod</td><td>@staticmethod</td><td>Utility function in class</td></tr></table></div>
+    </div>
+  </section>
+
+  <section class="section" id="s19">
+    <div class="section-header"><span class="section-number">19</span><h2>Practice Questions</h2><span class="tag">20 QUESTIONS</span></div>
+    <div class="progress-wrap">
+      <div class="progress-label">PROGRESS</div>
+      <div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
+      <div id="progress-text">0 / 20 questions marked as done</div>
+    </div>
+
+    <div class="q-card difficulty-easy">
+      <div class="q-header"><div><div class="q-num">QUESTION 01</div><div class="q-text">Create a class Car with attributes brand, model, and year. Add a method display_info() that prints all details.</div></div><span class="diff-badge badge-easy">EASY</span></div>
+      <div class="q-tags"><span class="q-tag">class</span><span class="q-tag">__init__</span><span class="q-tag">method</span></div>
+      <div class="btn-row"><button class="hint-btn" onclick="toggleBox('h1')">💡 Hint</button><button class="sol-btn" onclick="toggleBox('s1')">✅ Solution</button><button class="mark-btn" id="mark1" onclick="markDone(1)">✓ Mark as Done</button></div>
+      <div class="hint-box" id="h1">Define __init__ and store with self. In display_info(), use an f-string to print all three.</div>
+      <div class="sol-box" id="s1"><pre><span class="kw">class</span> <span class="cls">Car</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">brand</span>, <span class="var">model</span>, <span class="var">year</span>):
+        <span class="var">self</span>.brand, <span class="var">self</span>.model, <span class="var">self</span>.year = <span class="var">brand</span>, <span class="var">model</span>, <span class="var">year</span>
+    <span class="kw">def</span> <span class="fn">display_info</span>(<span class="var">self</span>):
+        <span class="fn">print</span>(<span class="fn">f</span><span class="str">"{self.year} {self.brand} {self.model}"</span>)</pre></div>
+    </div>
+
+    <div class="q-card difficulty-easy">
+      <div class="q-header"><div><div class="q-num">QUESTION 02</div><div class="q-text">Create a Rectangle class with width and height. Add methods area() and perimeter().</div></div><span class="diff-badge badge-easy">EASY</span></div>
+      <div class="q-tags"><span class="q-tag">class</span><span class="q-tag">methods</span><span class="q-tag">math</span></div>
+      <div class="btn-row"><button class="hint-btn" onclick="toggleBox('h2')">💡 Hint</button><button class="sol-btn" onclick="toggleBox('s2')">✅ Solution</button><button class="mark-btn" id="mark2" onclick="markDone(2)">✓ Mark as Done</button></div>
+      <div class="hint-box" id="h2">area = width * height. perimeter = 2 * (width + height).</div>
+      <div class="sol-box" id="s2"><pre><span class="kw">class</span> <span class="cls">Rectangle</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">w</span>, <span class="var">h</span>):
+        <span class="var">self</span>.w, <span class="var">self</span>.h = <span class="var">w</span>, <span class="var">h</span>
+    <span class="kw">def</span> <span class="fn">area</span>(<span class="var">self</span>): <span class="kw">return</span> <span class="var">self</span>.w * <span class="var">self</span>.h
+    <span class="kw">def</span> <span class="fn">perimeter</span>(<span class="var">self</span>): <span class="kw">return</span> <span class="nm">2</span> * (<span class="var">self</span>.w + <span class="var">self</span>.h)</pre></div>
+    </div>
+
+    <div class="q-card difficulty-medium">
+      <div class="q-header"><div><div class="q-num">QUESTION 03</div><div class="q-text">Create a BankAccount class with private __balance. Use @property to safely get/set balance.</div></div><span class="diff-badge badge-medium">MEDIUM</span></div>
+      <div class="q-tags"><span class="q-tag">@property</span><span class="q-tag">encapsulation</span><span class="q-tag">private</span></div>
+      <div class="btn-row"><button class="hint-btn" onclick="toggleBox('h3')">💡 Hint</button><button class="sol-btn" onclick="toggleBox('s3')">✅ Solution</button><button class="mark-btn" id="mark3" onclick="markDone(3)">✓ Mark as Done</button></div>
+      <div class="hint-box" id="h3">@property returns self.__balance. @balance.setter validates before updating.</div>
+      <div class="sol-box" id="s3"><pre><span class="kw">class</span> <span class="cls">BankAccount</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">owner</span>, <span class="var">balance</span>=<span class="nm">0</span>):
+        <span class="var">self</span>.owner = <span class="var">owner</span>
+        <span class="var">self</span>.__balance = <span class="var">balance</span>
+    <span class="deco">@property</span>
+    <span class="kw">def</span> <span class="fn">balance</span>(<span class="var">self</span>): <span class="kw">return</span> <span class="var">self</span>.__balance
+    <span class="deco">@balance.setter</span>
+    <span class="kw">def</span> <span class="fn">balance</span>(<span class="var">self</span>, <span class="var">v</span>):
+        <span class="kw">if</span> <span class="var">v</span> >= <span class="nm">0</span>: <span class="var">self</span>.__balance = <span class="var">v</span></pre></div>
+    </div>
+
+    <div class="q-card difficulty-medium">
+      <div class="q-header"><div><div class="q-num">QUESTION 04</div><div class="q-text">Create Animal, Dog, and Cat classes. Dog/Cat override speak(). Loop over a list and call speak() on each.</div></div><span class="diff-badge badge-medium">MEDIUM</span></div>
+      <div class="q-tags"><span class="q-tag">inheritance</span><span class="q-tag">override</span><span class="q-tag">polymorphism</span></div>
+      <div class="btn-row"><button class="hint-btn" onclick="toggleBox('h4')">💡 Hint</button><span class="btn-row"><button class="sol-btn" onclick="toggleBox('s4')">✅ Solution</button><button class="mark-btn" id="mark4" onclick="markDone(4)">✓ Mark as Done</button></div>
+      <div class="hint-box" id="h4">class Dog(Animal): then define speak() inside Dog. Same for Cat. Loop with for a in [Dog(), Cat()]: a.speak()</div>
+      <div class="sol-box" id="s4"><pre><span class="kw">class</span> <span class="cls">Animal</span>:
+    <span class="kw">def</span> <span class="fn">speak</span>(<span class="var">self</span>): <span class="fn">print</span>(<span class="str">"Sound"</span>)
+<span class="kw">class</span> <span class="cls">Dog</span>(<span class="cls">Animal</span>):
+    <span class="kw">def</span> <span class="fn">speak</span>(<span class="var">self</span>): <span class="fn">print</span>(<span class="str">"Woof!"</span>)
+<span class="kw">class</span> <span class="cls">Cat</span>(<span class="cls">Animal</span>):
+    <span class="kw">def</span> <span class="fn">speak</span>(<span class="var">self</span>): <span class="fn">print</span>(<span class="str">"Meow!"</span>)
+<span class="kw">for</span> <span class="var">a</span> <span class="kw">in</span> [<span class="cls">Dog</span>(), <span class="cls">Cat</span>()]:
+    <span class="var">a</span>.speak()</pre></div>
+    </div>
+
+    <div class="q-card difficulty-hard">
+      <div class="q-header"><div><div class="q-num">QUESTION 05</div><div class="q-text">Build a full School Management System: Person base class, Student/Teacher subclasses, Classroom (composition). Demonstrate all four OOP pillars.</div></div><span class="diff-badge badge-hard">HARD</span></div>
+      <div class="q-tags"><span class="q-tag">full project</span><span class="q-tag">all pillars</span><span class="q-tag">composition</span></div>
+      <div class="btn-row"><button class="hint-btn" onclick="toggleBox('h5')">💡 Hint</button><button class="sol-btn" onclick="toggleBox('s5')">✅ Solution</button><button class="mark-btn" id="mark5" onclick="markDone(5)">✓ Mark as Done</button></div>
+      <div class="hint-box" id="h5">Person → Student/Teacher (inheritance). Classroom HAS-A list of Students (composition). Use @property, private attrs, abstract methods.</div>
+      <div class="sol-box" id="s5"><pre><span class="kw">from</span> abc <span class="kw">import</span> ABC, abstractmethod
+<span class="kw">class</span> <span class="cls">Person</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">name</span>):
+        <span class="var">self</span>.name = <span class="var">name</span>
+<span class="kw">class</span> <span class="cls">Student</span>(<span class="cls">Person</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>, <span class="var">name</span>):
+        <span class="fn">super</span>().__init__(<span class="var">name</span>)
+        <span class="var">self</span>.__marks = []
+<span class="kw">class</span> <span class="cls">Classroom</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="var">self</span>):
+        <span class="var">self</span>.students = []  <span class="cm"># composition</span></pre></div>
+    </div>
+
+  </section>
+
+  <footer><p>OOP in Python — Complete Reference · 19 Sections + 20 Practice Questions · Built for mastery 🐍</p></footer>
+</div>
+
+<script>
+  const TOTAL = 5;
+  const done = new Set();
+  function toggleBox(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  }
+  function markDone(n) {
+    const btn = document.getElementById('mark' + n);
+    if (done.has(n)) {
+      done.delete(n);
+      btn.classList.remove('done');
+      btn.textContent = '✓ Mark as Done';
+    } else {
+      done.add(n);
+      btn.classList.add('done');
+      btn.textContent = '✅ Done!';
+    }
+    const pct = (done.size / TOTAL) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = done.size + ' / ' + TOTAL + ' questions marked as done';
+  }
+</script>
+</body>
+</html>

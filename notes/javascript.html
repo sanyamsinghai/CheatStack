@@ -1,0 +1,640 @@
+<!-- notes/javascript.html — JavaScript Cheatsheet -->
+<div class="cs-badge">REFERENCE GUIDE</div>
+<h1 class="cs-title">JavaScript Cheatsheet</h1>
+<p class="cs-subtitle">// modern JS essentials · ES6+ · async patterns · DOM manipulation</p>
+
+<nav class="cs-toc">
+  <h3>TABLE OF CONTENTS</h3>
+  <a href="#s1">1. Variables, Data Types & Memory</a>
+  <a href="#s2">2. Operators & Control Flow</a>
+  <a href="#s3">3. Functions & Scope</a>
+  <a href="#s4">4. Objects & Prototypes</a>
+  <a href="#s5">5. Arrays & Methods</a>
+  <a href="#s6">6. Async & Promises</a>
+  <a href="#s7">7. ES6+ Features</a>
+  <a href="#s8">8. DOM & Events</a>
+  <a href="#practice">📝 Practice Questions</a>
+</nav>
+
+<!-- ============================================================
+  SECTION 1: VARIABLES, DATA TYPES & MEMORY
+  ============================================================ -->
+<section class="cs-section" id="s1">
+  <div class="cs-section-header">
+    <span class="cs-num">01</span>
+    <h2>Variables, Data Types & Memory</h2>
+    <span class="cs-tag">FUNDAMENTALS</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card">
+      <div class="cmd-name">Variable Declaration</div>
+      <div class="cmd-desc">Modern ways to declare variables with different scopes.</div>
+      <pre><span class="kw">var</span> x = 10;    <span class="cmt">// function-scoped, hoisted</span>
+<span class="kw">let</span> y = 20;    <span class="cmt">// block-scoped, hoisted (TDZ)</span>
+<span class="kw">const</span> z = 30;  <span class="cmt">// block-scoped, cannot reassign</span></pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Primitive Data Types</div>
+      <div class="cmd-desc">Number, String, Boolean, Null, Undefined, Symbol, BigInt</div>
+      <pre><span class="kw">typeof</span> 42;           <span class="cmt">// "number"</span>
+<span class="kw">typeof</span> <span class="str">"hi"</span>;       <span class="cmt">// "string"</span>
+<span class="kw">typeof</span> <span class="fn">true</span>;       <span class="cmt">// "boolean"</span>
+<span class="kw">typeof</span> <span class="fn">undefined</span>;  <span class="cmt">// "undefined"</span>
+<span class="kw">typeof</span> <span class="fn">null</span>;       <span class="cmt">// "object" (quirk!)</span>
+<span class="kw">typeof</span> Symbol(<span class="str">"id"</span>);  <span class="cmt">// "symbol"</span>
+<span class="kw">typeof</span> 999n;        <span class="cmt">// "bigint"</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Type Coercion & Equality</div>
+      <div class="cmd-desc">Loose vs strict equality, implicit type conversion.</div>
+      <pre><span class="num">5</span> == <span class="str">"5"</span>;         <span class="cmt">// true (loose, coerces to same type)</span>
+<span class="num">5</span> === <span class="str">"5"</span>;        <span class="cmt">// false (strict, no coercion)</span>
+<span class="fn">null</span> == <span class="fn">undefined</span>;  <span class="cmt">// true (loose only)</span>
+<span class="fn">null</span> === <span class="fn">undefined</span>; <span class="cmt">// false</span>
+<span class="str">""</span> == <span class="fn">false</span>;       <span class="cmt">// true</span>
+<span class="str">""</span> === <span class="fn">false</span>;      <span class="cmt">// false</span>
+<span class="fn">Boolean</span>(<span class="str">""</span>);           <span class="cmt">// false (falsy values)</span></pre>
+      <div class="tip">Best practice: Always use === and !== to avoid unexpected coercion bugs.</div>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Template Literals</div>
+      <div class="cmd-desc">String interpolation and multi-line strings.</div>
+      <pre><span class="kw">const</span> name = <span class="str">"Alice"</span>;
+<span class="kw">const</span> greeting = <span class="str">`Hello, ${name}!`</span>;
+<span class="kw">const</span> multiline = <span class="str">`
+  Line 1
+  Line 2
+`</span>;</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 2: OPERATORS & CONTROL FLOW
+  ============================================================ -->
+<section class="cs-section" id="s2">
+  <div class="cs-section-header">
+    <span class="cs-num">02</span>
+    <h2>Operators & Control Flow</h2>
+    <span class="cs-tag">CONTROL</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card">
+      <div class="cmd-name">Logical Operators</div>
+      <div class="cmd-desc">AND, OR, NOT, Nullish Coalescing, Optional Chaining</div>
+      <pre>a && b;     <span class="cmt">// AND</span>
+a || b;     <span class="cmt">// OR</span>
+!a;         <span class="cmt">// NOT</span>
+a ?? b;     <span class="cmt">// nullish coalescing (null/undefined)</span>
+obj?.prop;  <span class="cmt">// optional chaining</span>
+arr?.[0];   <span class="cmt">// optional array access</span></pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Spread & Destructuring</div>
+      <div class="cmd-desc">Spread operator and destructuring assignment.</div>
+      <pre><span class="cmt">// Spread</span>
+<span class="kw">const</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+[<span class="num">0</span>, ...arr];  <span class="cmt">// [0, 1, 2, 3]</span>
+
+<span class="cmt">// Destructuring</span>
+<span class="kw">const</span> [a, b, c] = arr;
+<span class="kw">const</span> {x, y} = {x: <span class="num">1</span>, y: <span class="num">2</span>};
+<span class="kw">const</span> {name: n} = obj;  <span class="cmt">// rename</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">if/else vs ternary vs switch</div>
+      <div class="cmd-desc">Control flow statements.</div>
+      <pre><span class="cmt">// if/else</span>
+<span class="kw">if</span> (x > 5) { <span class="cmt">/* ... */</span> } <span class="kw">else</span> { <span class="cmt">/* ... */</span> }
+
+<span class="cmt">// ternary</span>
+<span class="kw">let</span> result = x > 5 ? <span class="str">"big"</span> : <span class="str">"small"</span>;
+
+<span class="cmt">// switch</span>
+<span class="kw">switch</span> (type) {
+  <span class="kw">case</span> <span class="str">"admin"</span>: <span class="cmt">/* ... */</span> <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="str">"user"</span>: <span class="cmt">/* ... */</span> <span class="kw">break</span>;
+  <span class="kw">default</span>: <span class="cmt">/* ... */</span>
+}</pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Loops</div>
+      <div class="cmd-desc">for, while, for...of, for...in, forEach.</div>
+      <pre><span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < <span class="num">5</span>; i++) { <span class="cmt">/* ... */</span> }
+<span class="kw">while</span> (condition) { <span class="cmt">/* ... */</span> }
+<span class="kw">for</span> (<span class="kw">const</span> item <span class="kw">of</span> arr) { <span class="cmt">/* ... */</span> }
+<span class="kw">for</span> (<span class="kw">const</span> key <span class="kw">in</span> obj) { <span class="cmt">/* ... */</span> }
+arr.<span class="fn">forEach</span>((item, idx) => { <span class="cmt">/* ... */</span> });</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 3: FUNCTIONS & SCOPE
+  ============================================================ -->
+<section class="cs-section" id="s3">
+  <div class="cs-section-header">
+    <span class="cs-num">03</span>
+    <h2>Functions & Scope</h2>
+    <span class="cs-tag">FUNCTIONS</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Function Declaration vs Expression</div>
+      <div class="cmd-desc">Different ways to create functions and their hoisting behavior.</div>
+      <pre><span class="cmt">// Declaration (hoisted)</span>
+<span class="kw">function</span> <span class="fn">add</span>(a, b) {
+  <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Expression (not hoisted)</span>
+<span class="kw">const</span> add = <span class="kw">function</span>(a, b) { <span class="kw">return</span> a + b; };
+
+<span class="cmt">// Arrow function (modern)</span>
+<span class="kw">const</span> add = (a, b) => a + b;
+<span class="kw">const</span> square = x => x * x;
+<span class="kw">const</span> fn = () => { <span class="cmt">/* block body */</span> };</pre>
+      <div class="tip">Arrow functions don't have their own 'this' — they inherit from parent scope.</div>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Default Parameters & Rest Parameters</div>
+      <div class="cmd-desc">Set defaults and collect remaining arguments.</div>
+      <pre><span class="kw">function</span> <span class="fn">greet</span>(name = <span class="str">"Guest"</span>) {
+  <span class="kw">return</span> <span class="str">`Hello, ${name}`</span>;
+}
+
+<span class="kw">function</span> <span class="fn">sum</span>(...nums) {
+  <span class="kw">return</span> nums.<span class="fn">reduce</span>((a, b) => a + b, <span class="num">0</span>);
+}</pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Scope: Global, Function, Block</div>
+      <div class="cmd-desc">Understanding variable scope and the scope chain.</div>
+      <pre><span class="kw">let</span> global = <span class="str">"outer"</span>;  <span class="cmt">// global scope</span>
+
+<span class="kw">function</span> <span class="fn">test</span>() {
+  <span class="kw">let</span> fn_scope = <span class="str">"function"</span>;
+  
+  <span class="kw">if</span> (<span class="fn">true</span>) {
+    <span class="kw">let</span> block_scope = <span class="str">"block"</span>;  <span class="cmt">// only here</span>
+  }
+  
+  <span class="cmt">// block_scope is NOT accessible here</span>
+}</pre>
+      <div class="tip">Use 'const' by default, 'let' when reassignment needed, avoid 'var'.</div>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Closures</div>
+      <div class="cmd-desc">Functions remember variables from outer scope even after execution.</div>
+      <pre><span class="kw">function</span> <span class="fn">counter</span>() {
+  <span class="kw">let</span> count = <span class="num">0</span>;
+  <span class="kw">return</span> () => ++count;
+}
+<span class="kw">const</span> inc = <span class="fn">counter</span>();
+<span class="fn">inc</span>();  <span class="cmt">// 1</span>
+<span class="fn">inc</span>();  <span class="cmt">// 2</span></pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 4: OBJECTS & PROTOTYPES
+  ============================================================ -->
+<section class="cs-section" id="s4">
+  <div class="cs-section-header">
+    <span class="cs-num">04</span>
+    <h2>Objects & Prototypes</h2>
+    <span class="cs-tag">OBJECTS</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card">
+      <div class="cmd-name">Object Creation</div>
+      <div class="cmd-desc">Different ways to create and initialize objects.</div>
+      <pre><span class="cmt">// Literal</span>
+<span class="kw">const</span> obj = {name: <span class="str">"John"</span>, age: <span class="num">30</span>};
+
+<span class="cmt">// Constructor</span>
+<span class="kw">const</span> obj = <span class="kw">new</span> <span class="fn">Object</span>();
+
+<span class="cmt">// Object.create()</span>
+<span class="kw">const</span> obj = Object.<span class="fn">create</span>(<span class="fn">null</span>);</pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Object Methods & Property Access</div>
+      <div class="cmd-desc">Working with object properties and methods.</div>
+      <pre><span class="kw">const</span> obj = {name: <span class="str">"Alice"</span>, age: <span class="num">25</span>};
+
+<span class="cmt">// Access</span>
+obj.name;           <span class="cmt">// "Alice" (dot notation)</span>
+obj[<span class="str">"name"</span>];       <span class="cmt">// "Alice" (bracket notation)</span>
+
+<span class="cmt">// Modify</span>
+obj.name = <span class="str">"Bob"</span>;
+obj.city = <span class="str">"NYC"</span>;  <span class="cmt">// add new property</span>
+<span class="kw">delete</span> obj.age;    <span class="cmt">// remove property</span>
+
+<span class="cmt">// Check</span>
+<span class="str">"name"</span> <span class="kw">in</span> obj;           <span class="cmt">// true</span>
+obj.<span class="fn">hasOwnProperty</span>(<span class="str">"name"</span>); <span class="cmt">// true</span>
+
+<span class="cmt">// Iterate</span>
+Object.<span class="fn">keys</span>(obj);      <span class="cmt">// ["name", "age"]</span>
+Object.<span class="fn">values</span>(obj);    <span class="cmt">// ["Alice", 25]</span>
+Object.<span class="fn">entries</span>(obj);   <span class="cmt">// [["name", "Alice"], ["age", 25]]</span></pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Constructor Functions & Classes</div>
+      <div class="cmd-desc">Creating objects with constructors and ES6 classes.</div>
+      <pre><span class="cmt">// Constructor function</span>
+<span class="kw">function</span> <span class="fn">Person</span>(name) {
+  <span class="kw">this</span>.name = name;
+}
+<span class="kw">const</span> p1 = <span class="kw">new</span> <span class="fn">Person</span>(<span class="str">"John"</span>);
+
+<span class="cmt">// ES6 Class</span>
+<span class="kw">class</span> Person {
+  <span class="fn">constructor</span>(name) {
+    <span class="kw">this</span>.name = name;
+  }
+}</pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Prototypes & Inheritance</div>
+      <div class="cmd-desc">Prototype chain and object inheritance.</div>
+      <pre><span class="kw">function</span> <span class="fn">Animal</span>(name) { <span class="kw">this</span>.name = name; }
+Animal.prototype.<span class="fn">speak</span> = <span class="kw">function</span>() {
+  console.<span class="fn">log</span>(<span class="kw">this</span>.name + <span class="str">" makes a sound"</span>);
+};
+
+<span class="kw">function</span> <span class="fn">Dog</span>(name) { Animal.<span class="fn">call</span>(<span class="kw">this</span>, name); }
+Dog.prototype = Object.<span class="fn">create</span>(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+<span class="cmt">// Or with classes:</span>
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+  <span class="fn">speak</span>() { console.<span class="fn">log</span>(<span class="kw">this</span>.name + <span class="str">" barks"</span>); }
+}</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 5: ARRAYS & METHODS
+  ============================================================ -->
+<section class="cs-section" id="s5">
+  <div class="cs-section-header">
+    <span class="cs-num">05</span>
+    <h2>Arrays & Methods</h2>
+    <span class="cs-tag">ARRAYS</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card">
+      <div class="cmd-name">Array Creation & Access</div>
+      <div class="cmd-desc">Creating arrays and accessing elements.</div>
+      <pre><span class="kw">const</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+<span class="kw">const</span> arr = <span class="kw">new</span> <span class="fn">Array</span>(<span class="num">5</span>);  <span class="cmt">// length 5</span>
+arr[<span class="num">0</span>];              <span class="cmt">// first</span>
+arr[arr.length - <span class="num">1</span>];  <span class="cmt">// last</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Mutating Methods (change original)</div>
+      <div class="cmd-desc">Methods that modify the array in place: push, pop, shift, unshift, splice, reverse, sort</div>
+      <pre>arr.<span class="fn">push</span>(<span class="num">4</span>);           <span class="cmt">// add to end → [1,2,3,4]</span>
+arr.<span class="fn">pop</span>();            <span class="cmt">// remove from end → [1,2,3]</span>
+arr.<span class="fn">shift</span>();          <span class="cmt">// remove from start → [2,3]</span>
+arr.<span class="fn">unshift</span>(<span class="num">0</span>);       <span class="cmt">// add to start → [0,2,3]</span>
+arr.<span class="fn">splice</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="num">99</span>);  <span class="cmt">// remove 1 at index 1, insert 99 → [0,99,3]</span>
+arr.<span class="fn">reverse</span>();        <span class="cmt">// reverse in place</span>
+arr.<span class="fn">sort</span>();          <span class="cmt">// sorts as strings by default!</span>
+arr.<span class="fn">sort</span>((a, b) => a - b); <span class="cmt">// numeric sort</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Non-Mutating Methods (return new array)</div>
+      <div class="cmd-desc">Methods that don't modify original: slice, concat, map, filter, reduce, find, includes</div>
+      <pre>arr.<span class="fn">slice</span>(<span class="num">1</span>, <span class="num">3</span>);           <span class="cmt">// [2,3] (elements at 1,2)</span>
+arr.<span class="fn">concat</span>([<span class="num">5</span>, <span class="num">6</span>]);        <span class="cmt">// [1,2,3,5,6]</span>
+arr.<span class="fn">map</span>(x => x * <span class="num">2</span>);     <span class="cmt">// [2,4,6]</span>
+arr.<span class="fn">filter</span>(x => x > <span class="num">1</span>);  <span class="cmt">// [2,3]</span>
+arr.<span class="fn">reduce</span>((a, b) => a + b); <span class="cmt">// 6 (sum)</span>
+arr.<span class="fn">find</span>(x => x > <span class="num">2</span>);    <span class="cmt">// 3 (first match)</span>
+arr.<span class="fn">includes</span>(<span class="num">2</span>);         <span class="cmt">// true</span>
+arr.<span class="fn">join</span>(<span class="str">"-"</span>);           <span class="cmt">// "1-2-3"</span></pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Array Destructuring</div>
+      <div class="cmd-desc">Unpack array elements into variables.</div>
+      <pre><span class="kw">const</span> [a, b, c] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+<span class="kw">const</span> [x, , z] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];  <span class="cmt">// skip middle</span>
+<span class="kw">const</span> [first, ...rest] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];  <span class="cmt">// rest: [2,3]</span></pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 6: ASYNC & PROMISES
+  ============================================================ -->
+<section class="cs-section" id="s6">
+  <div class="cs-section-header">
+    <span class="cs-num">06</span>
+    <h2>Async & Promises</h2>
+    <span class="cs-tag">ASYNC</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Promises</div>
+      <div class="cmd-desc">Handle asynchronous operations with .then().catch().finally()</div>
+      <pre><span class="kw">const</span> promise = <span class="kw">new</span> <span class="fn">Promise</span>((resolve, reject) => {
+  <span class="kw">if</span> (success) resolve(value);
+  <span class="kw">else</span> reject(error);
+});
+
+promise
+  .<span class="fn">then</span>(result => console.<span class="fn">log</span>(result))
+  .<span class="fn">catch</span>(error => console.<span class="fn">log</span>(error))
+  .<span class="fn">finally</span>(() => console.<span class="fn">log</span>(<span class="str">"done"</span>));</pre>
+      <div class="tip">Always use .catch() or try/catch to handle rejections.</div>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">async/await</div>
+      <div class="cmd-desc">Modern syntax for handling promises — cleaner than .then().catch()</div>
+      <pre><span class="kw">async function</span> <span class="fn">fetchData</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"/api/users"</span>);
+    <span class="kw">const</span> data = <span class="kw">await</span> response.<span class="fn">json</span>();
+    <span class="kw">return</span> data;
+  } <span class="kw">catch</span> (err) {
+    console.<span class="fn">log</span>(<span class="str">"Error:"</span>, err);
+  }
+}</pre>
+      <div class="tip">Use await only inside async functions. It pauses execution until promise resolves.</div>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Promise Utilities</div>
+      <div class="cmd-desc">Promise.all(), Promise.race(), Promise.allSettled()</div>
+      <pre>Promise.<span class="fn">all</span>([p1, p2])
+  .<span class="fn">then</span>(results => { <span class="cmt">/* both done */</span> });
+
+Promise.<span class="fn">race</span>([p1, p2])
+  .<span class="fn">then</span>(firstDone => { <span class="cmt">/* first completes */</span> });
+
+Promise.<span class="fn">allSettled</span>([p1, p2])
+  .<span class="fn">then</span>(results => { <span class="cmt">/* all finished, no reject */</span> });</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 7: ES6+ FEATURES
+  ============================================================ -->
+<section class="cs-section" id="s7">
+  <div class="cs-section-header">
+    <span class="cs-num">07</span>
+    <h2>ES6+ Features</h2>
+    <span class="cs-tag">MODERN JS</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card">
+      <div class="cmd-name">let & const</div>
+      <div class="cmd-desc">Block scoping and immutability.</div>
+      <pre><span class="kw">let</span> x = 5;
+x = 10;  <span class="cmt">// OK, can reassign</span>
+
+<span class="kw">const</span> y = 5;
+y = 10;  <span class="cmt">// ERROR, cannot reassign</span>
+y.prop = 20;  <span class="cmt">// OK, can mutate</span></pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Template Literals & Tagged Templates</div>
+      <div class="cmd-desc">String interpolation and custom string processing.</div>
+      <pre><span class="kw">const</span> name = <span class="str">"World"</span>;
+<span class="str">`Hello, ${name}!`</span>  <span class="cmt">// "Hello, World!"</span>
+
+<span class="cmt">// Tagged template</span>
+<span class="kw">const</span> html = <span class="fn">styled</span><span class="str">`color: red`</span>;
+<span class="kw">function</span> <span class="fn">styled</span>(strings, ...values) { <span class="cmt">/* ... */</span> }</pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Object Shorthand & Computed Properties</div>
+      <div class="cmd-desc">Concise object notation.</div>
+      <pre><span class="kw">const</span> name = <span class="str">"Alice"</span>, age = <span class="num">30</span>;
+<span class="cmt">// Shorthand</span>
+<span class="kw">const</span> person = {name, age};
+
+<span class="cmt">// Computed properties</span>
+<span class="kw">const</span> key = <span class="str">"name"</span>;
+<span class="kw">const</span> obj = {[key]: <span class="str">"value"</span>};  <span class="cmt">// {name: "value"}</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Destructuring: Objects & Default Values</div>
+      <div class="cmd-desc">Unpack objects with renaming and defaults.</div>
+      <pre><span class="kw">const</span> {name, age} = {name: <span class="str">"Alice"</span>, age: <span class="num">30</span>};
+
+<span class="cmt">// Renaming</span>
+<span class="kw">const</span> {name: n, age: a} = person;
+
+<span class="cmt">// Defaults</span>
+<span class="kw">const</span> {name = <span class="str">"Guest"</span>, country = <span class="str">"USA"</span>} = person;
+
+<span class="cmt">// Nested</span>
+<span class="kw">const</span> {address: {city}} = person;</pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">for...of & for...in Loops</div>
+      <div class="cmd-desc">Different iteration approaches.</div>
+      <pre><span class="kw">const</span> arr = [<span class="str">"a"</span>, <span class="str">"b"</span>, <span class="str">"c"</span>];
+<span class="cmt">// for...of (values)</span>
+<span class="kw">for</span> (<span class="kw">const</span> item <span class="kw">of</span> arr) { console.<span class="fn">log</span>(item); }
+
+<span class="cmt">// for...in (keys/indices)</span>
+<span class="kw">for</span> (<span class="kw">const</span> idx <span class="kw">in</span> arr) { console.<span class="fn">log</span>(idx); }</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  SECTION 8: DOM & EVENTS
+  ============================================================ -->
+<section class="cs-section" id="s8">
+  <div class="cs-section-header">
+    <span class="cs-num">08</span>
+    <h2>DOM & Events</h2>
+    <span class="cs-tag">BROWSER</span>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card wide">
+      <div class="cmd-name">DOM Selection & Manipulation</div>
+      <div class="cmd-desc">Selecting and modifying DOM elements.</div>
+      <pre><span class="cmt">// Selection</span>
+document.<span class="fn">getElementById</span>(<span class="str">"id"</span>);
+document.<span class="fn">querySelector</span>(<span class="str">".class"</span>);      <span class="cmt">// first match</span>
+document.<span class="fn">querySelectorAll</span>(<span class="str">"div"</span>);   <span class="cmt">// all matches</span>
+
+<span class="cmt">// Manipulation</span>
+el.textContent = <span class="str">"text"</span>;
+el.innerHTML = <span class="str">"&lt;b&gt;html&lt;/b&gt;"</span>;
+el.<span class="fn">setAttribute</span>(<span class="str">"data-id"</span>, <span class="str">"123"</span>);
+el.classList.<span class="fn">add</span>(<span class="str">"active"</span>);
+el.classList.<span class="fn">remove</span>(<span class="str">"hidden"</span>);
+el.classList.<span class="fn">toggle</span>(<span class="str">"dark"</span>);</pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">Event Handling</div>
+      <div class="cmd-desc">Listening to and handling user interactions.</div>
+      <pre><span class="cmt">// addEventListener (preferred)</span>
+button.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, (e) => {
+  console.<span class="fn">log</span>(e.target, e.type);
+});
+
+<span class="cmt">// Event delegation (efficient for many elements)</span>
+ul.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, (e) => {
+  <span class="kw">if</span> (e.target.tagName === <span class="str">"LI"</span>) {
+    console.<span class="fn">log</span>(<span class="str">"Clicked:"</span>, e.target.textContent);
+  }
+});
+
+<span class="cmt">// Prevent default & stop propagation</span>
+e.<span class="fn">preventDefault</span>();
+e.<span class="fn">stopPropagation</span>();</pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">Common Events</div>
+      <div class="cmd-desc">Frequently used browser events.</div>
+      <pre>click        <span class="cmt">// mouse click</span>
+change       <span class="cmt">// input value changed</span>
+submit       <span class="cmt">// form submitted</span>
+keydown      <span class="cmt">// key pressed</span>
+mouseover    <span class="cmt">// mouse over element</span>
+scroll       <span class="cmt">// page scrolled</span>
+load         <span class="cmt">// page/image loaded</span>
+DOMContentLoaded  <span class="cmt">// DOM ready</span></pre>
+    </div>
+
+    <div class="cs-card">
+      <div class="cmd-name">setTimeout & setInterval</div>
+      <div class="cmd-desc">Delayed and repeated execution.</div>
+      <pre><span class="fn">setTimeout</span>(() => {
+  console.<span class="fn">log</span>(<span class="str">"After 1 second"</span>);
+}, <span class="num">1000</span>);
+
+<span class="kw">const</span> intervalId = <span class="fn">setInterval</span>(() => {
+  console.<span class="fn">log</span>(<span class="str">"Every 1 second"</span>);
+}, <span class="num">1000</span>);
+
+<span class="fn">clearInterval</span>(intervalId);</pre>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+  PRACTICE QUESTIONS
+  ============================================================ -->
+<section class="cs-section" id="practice">
+  <div class="cs-section-header">
+    <span class="cs-num">09</span>
+    <h2>📝 Practice Questions</h2>
+  </div>
+  <div class="cs-cards">
+
+    <div class="cs-card wide">
+      <div class="cmd-name">1. What's the difference between var, let, and const?</div>
+      <pre><span class="cmt">// var: function-scoped, hoisted, can be redeclared
+// let: block-scoped, hoisted (TDZ), cannot be redeclared
+// const: block-scoped, not hoistable, cannot be reassigned or redeclared
+
+// Best practice: Use const by default, let if you need reassignment, avoid var</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">2. Explain closures and provide an example</div>
+      <pre><span class="cmt">// A closure is a function that has access to variables from its outer scope
+// even after the outer function has finished executing.
+
+function outer(name) {
+  return function inner() {
+    console.log(name);  // 'name' is captured
+  };
+}
+const greet = outer("John");
+greet();  // "John" - closure remembers 'name'</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">3. What is the difference between synchronous and asynchronous code?</div>
+      <pre><span class="cmt">// Synchronous: Code executes line by line, waits for each to complete
+console.log(1);
+console.log(2);  // waits for 1 first
+console.log(3);
+
+// Asynchronous: Code doesn't wait, uses callbacks/promises
+console.log(1);
+setTimeout(() => console.log(2), 1000);  // happens later
+console.log(3);  // runs immediately after 1</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">4. What's the difference between map and forEach?</div>
+      <pre><span class="cmt">// map: returns new array, useful for transformations
+const doubled = [1,2,3].map(x => x * 2);  // [2,4,6]
+
+// forEach: doesn't return anything, useful for side effects
+[1,2,3].forEach(x => console.log(x * 2));  // prints 2, 4, 6
+
+// Use map when you need the result, forEach for side effects</span></pre>
+    </div>
+
+    <div class="cs-card wide">
+      <div class="cmd-name">5. Explain event delegation</div>
+      <pre><span class="cmt">// Instead of adding listeners to each item, add one to parent
+// and check the target
+
+const list = document.getElementById("myList");
+list.addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    console.log("Li clicked:", e.target.textContent);
+  }
+});
+
+// Benefits: Better performance with many elements, dynamic elements work too</span></pre>
+    </div>
+
+  </div>
+</section>
